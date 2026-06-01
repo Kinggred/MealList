@@ -6,8 +6,7 @@ from fastapi.encoders import jsonable_encoder
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session, SQLModel, select
 
-from content_manager.exceptions import DatabaseException, ItemNotFound
-from content_manager.models.base import BaseModel
+from app.models.base import BaseModel
 
 ModelType = TypeVar("ModelType", bound=BaseModel)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=SQLModel)
