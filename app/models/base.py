@@ -4,8 +4,8 @@ from uuid import UUID
 from sqlmodel import Field, SQLModel, func
 
 
-def generate_auto_model_name(model: str, create_date: datetime):
-    return f"New {model} {create_date.strftime('%Y-%m-%d')}"
+def generate_auto_model_name(model: str, created_at: datetime):
+    return f"New {model} {created_at.strftime('%Y-%m-%d')}"
 
 
 class BaseModel(SQLModel):

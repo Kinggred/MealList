@@ -3,10 +3,11 @@ from typing import Any, Dict, Generic, List, Type, TypeVar
 from uuid import UUID
 
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError   # Potential problems ahead - import from sqlmodel
 from sqlmodel import Session, SQLModel, select
 
 from app.models.base import BaseModel
+from app.api.exceptions import DatabaseException, NotFoundException
 
 ModelType = TypeVar("ModelType", bound=BaseModel)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=SQLModel)
@@ -37,9 +38,9 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         if data:
             logger.info(f"Retreived {self.model.__name__}: {id}")
             return data
-        raise ItemNotFound
+        raise NotFoundException
 
-    def get_multi(
+    def get_all(
         self,
         db: Session,
         *,
@@ -75,7 +76,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     def remove(self, db: Session, *, id: UUID) -> ModelType:
         db_obj = db.exec(select(self.model).where(self.model.id == id)).first()
         if not db_obj:
-            raise ItemNotFound
+            raise NotFoundException
         db_obj.enabled = False
         db.commit()
         logger.info(f"Removed {self.model.__name__}: {db_obj.id}")
