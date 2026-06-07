@@ -7,6 +7,13 @@ from alembic import context
 
 from app.core.settings import get_settings
 from app.models.base import BaseModel
+from app.models.user import User
+from app.models.ingridient import Ingredient
+from app.models.diet_ingredient import DietIngredient
+from app.models.recipe import Recipe
+from app.models.recipe_ingredient import RecipeIngredient
+from app.models.ingredient_self_reference import IngredientSelfReference
+from app.models.diet import Diet
 
 config = context.config
 if config.config_file_name is not None:
@@ -51,7 +58,7 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
-    run_migrations_on_database(settings.POSTGRES_DSN)
+    run_migrations_on_database(settings.POSTGRES_DSN.encoded_string())
 
 
 if context.is_offline_mode():
