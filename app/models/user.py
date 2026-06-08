@@ -8,10 +8,15 @@ class User(BaseModel, table=True):
     email: str
     password_hash: str
 
-class UserCreate(SQLModel):
+class UserCreateSchema(SQLModel):
     username: str | None = ""
     email: str
     password: str
+
+class UserCreate(SQLModel):
+    username: str | None = ""
+    email: str
+    password_hash: str
 
 class UserUpdate(SQLModel):
     username: str | None = None

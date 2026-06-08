@@ -13,9 +13,9 @@ from app.api.exceptions import UnauthorizedException
 from app.core.settings import get_settings
 from app.models.token import TokenData
 from app.models.user import User
-from app.crud.user import CRUDUser
+from app.crud.user import crud_user
 
-pwd_hash = PasswordHash().recommended()
+pwd_hash = PasswordHash.recommended()
 settings = get_settings()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -27,9 +27,9 @@ def verify_password(plain_password, hashed_password):
 def get_password_hash(password):
     return pwd_hash.hash(password)
 
-def authenticate_user(db: Session, username: str, password: str) -> User | None:
-    user = CRUDUser.get_user_by_email(db, email=username)
-    if not verify_password(password, user.hashed_password):
+def authenticate_user(db: Session, email: str, password: str) -> User | None:
+    user = crud_user.get_user_by_email(db, email=email)
+    if user and not verify_password(password, user.password_hash):
         return None
     return user
 
@@ -45,7 +45,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     return encoded_jwt
 
 
-async def get_current_user(db: Annotated[Session, Depends(get_session())],token: Annotated[str, Depends(oauth2_scheme)]):
+async def get_current_user(db: Annotated[Session, Depends(get_session)], token: Annotated[str, Depends(oauth2_scheme)]):
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         email = payload.get("sub")
@@ -54,7 +54,7 @@ async def get_current_user(db: Annotated[Session, Depends(get_session())],token:
         token_data = TokenData(email=email)
     except InvalidTokenError:
         raise UnauthorizedException
-    user = CRUDUser.get_user_by_email(db=db, email=token_data.email)
+    user = crud_user.get_user_by_email(db=db, email=token_data.email)
     if user is None:
         raise UnauthorizedException
     return user
@@ -63,6 +63,6 @@ async def get_current_user(db: Annotated[Session, Depends(get_session())],token:
 async def get_current_active_user(
     current_user: Annotated[User, Depends(get_current_user)],
 ):
-    if current_user.enabled:
+    if not current_user.enabled:
         raise UnauthorizedException
     return current_user

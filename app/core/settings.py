@@ -24,9 +24,9 @@ class Settings(BaseSettings):
     IDP_ALLOWED_ISSUERS: str = Field(env="IDP_ALLOWED_ISSUERS", default="")
     IDP_AUDIENCE: str = Field(env="IDP_AUDIENCE", default="")
     ALLOWED_CORS_ORIGINS: str = Field(env="ALLOWED_CORS_ORIGINS", default="*")
-    SECRET_KEY: str = Field(env="SECRET_KEY", default="")
+    SECRET_KEY: str = Field(env="SECRET_KEY")
     ALGORITHM: str = Field(env="ALGORITHM", default="HS256")
-    ACCESS_TOKEN_EXPIRE_MINUTE: int = Field(env="ACCESS_TOKEN_EXPIRE_MINUTES", default=30)
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(env="ACCESS_TOKEN_EXPIRE_MINUTES", default=30)
 
     @validator("POSTGRES_DSN", pre=True)
     def set_postgres_dsn(cls, current_value, values):
