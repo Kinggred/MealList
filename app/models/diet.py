@@ -5,5 +5,4 @@ from app.models.base import BaseModel
 
 class Diet(BaseModel, table=True):
     name: str
-    content:  Dict = Field(default={}, sa_column=Column(JSON))
-
+    content: Dict = Field(default={}, sa_column=Column(JSON))

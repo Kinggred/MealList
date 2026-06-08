@@ -3,7 +3,10 @@ from typing import Any, Dict, Generic, List, Type, TypeVar
 from uuid import UUID
 
 from fastapi.encoders import jsonable_encoder
-from sqlalchemy.exc import IntegrityError   # Potential problems ahead - import from sqlmodel
+from fastapi_pagination.ext.sqlalchemy import paginate
+from sqlalchemy.exc import (
+    IntegrityError,
+)  # Potential problems ahead - import from sqlmodel
 from sqlmodel import Session, SQLModel, select
 
 from app.models.base import BaseModel
@@ -51,6 +54,15 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
         return obj
 
+    def paginated_get_all(self, db: Session) -> List[ModelType]:
+        statement = (
+            select(self.model)
+            .where(self.model.enabled == True)
+            .order_by(self.model.created_at)
+        )
+
+        return paginate(db, statement)
+
     def create(self, db: Session, *, obj_in: CreateSchemaType, **kwargs) -> ModelType:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data)  # type: ignore
@@ -59,7 +71,13 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
         return obj
 
-    def update(self, db: Session, *, db_obj: ModelType, obj_in: UpdateSchemaType | Dict[str, Any]) -> ModelType:
+    def update(
+        self,
+        db: Session,
+        *,
+        db_obj: ModelType,
+        obj_in: UpdateSchemaType | Dict[str, Any],
+    ) -> ModelType:
         obj_data = jsonable_encoder(db_obj)
         if isinstance(obj_in, dict):
             update_data = obj_in

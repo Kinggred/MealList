@@ -4,7 +4,6 @@ from os import environ
 from pydantic import Field, PostgresDsn, validator
 from pydantic_settings import BaseSettings
 
-
 if not environ.get("POSTGRES_USER"):
     from dotenv import load_dotenv
 
@@ -26,7 +25,9 @@ class Settings(BaseSettings):
     ALLOWED_CORS_ORIGINS: str = Field(env="ALLOWED_CORS_ORIGINS", default="*")
     SECRET_KEY: str = Field(env="SECRET_KEY")
     ALGORITHM: str = Field(env="ALGORITHM", default="HS256")
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(env="ACCESS_TOKEN_EXPIRE_MINUTES", default=30)
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = Field(
+        env="ACCESS_TOKEN_EXPIRE_MINUTES", default=30
+    )
 
     @validator("POSTGRES_DSN", pre=True)
     def set_postgres_dsn(cls, current_value, values):

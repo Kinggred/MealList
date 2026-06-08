@@ -4,7 +4,5 @@ from app.models.base import BaseModel
 
 
 class Recipe(BaseModel, table=True):
-    text:  Dict = Field(default={}, sa_column=Column(JSON))
-    image: str # base64
-
-
+    text: Dict = Field(default={}, sa_column=Column(JSON))
+    image: str  # base64

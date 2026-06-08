@@ -26,9 +26,13 @@ if config.config_file_name is not None:
 
 target_metadata = BaseModel.metadata
 
+
 def run_migrations_on_database(database_url):
     connectable = engine_from_config(
-        {**config.get_section(config.config_ini_section), "sqlalchemy.url": database_url},
+        {
+            **config.get_section(config.config_ini_section),
+            "sqlalchemy.url": database_url,
+        },
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
@@ -38,7 +42,6 @@ def run_migrations_on_database(database_url):
 
         with context.begin_transaction():
             context.run_migrations()
-
 
 
 def run_migrations_offline() -> None:
@@ -52,9 +55,6 @@ def run_migrations_offline() -> None:
 
     with context.begin_transaction():
         context.run_migrations()
-
-
-
 
 
 def run_migrations_online() -> None:
