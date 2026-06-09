@@ -17,7 +17,7 @@ from app.crud.user import crud_user
 
 pwd_hash = PasswordHash.recommended()
 settings = get_settings()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token")
 
 
 def verify_password(plain_password, hashed_password):

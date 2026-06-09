@@ -11,6 +11,7 @@ from sqlmodel import Session, SQLModel, select
 
 from app.models.base import BaseModel
 from app.api.exceptions import DatabaseException, NotFoundException
+from app.models.user import User
 
 ModelType = TypeVar("ModelType", bound=BaseModel)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=SQLModel)
@@ -22,6 +23,7 @@ logger = logging.getLogger(__name__)
 class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     def __init__(self, model: Type[ModelType]):
         self.model = model
+        self.assigned = True if "created_by" in self.model.model_fields else False
 
     # TODO: Consider adding some kind of rollback on error.
     def db_add_operation(self, db: Session, object_to_add: ModelType) -> ModelType:
@@ -63,9 +65,15 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
         return paginate(db, statement)
 
-    def create(self, db: Session, *, obj_in: CreateSchemaType, **kwargs) -> ModelType:
+    def create(
+        self, db: Session, *, user: User | None, obj_in: CreateSchemaType, **kwargs
+    ) -> ModelType:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data)  # type: ignore
+        if self.assigned:
+            if user is None:
+                raise DatabaseException
+            db_obj.created_by = user.id
         obj = self.db_add_operation(db=db, object_to_add=db_obj)
         logger.info(f"Created {self.model.__name__}: {obj.id}")
 
