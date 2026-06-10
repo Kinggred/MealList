@@ -7,7 +7,14 @@ from sqlmodel import Session, select
 
 from app.crud.base import CRUDBase
 from app.crud.meal_dish import meal_dish_crud
-from app.models.meal import Meal, MealCreate, MealUpdate, MealCreateSchema, MealView
+from app.models.meal import (
+    Meal,
+    MealCreate,
+    MealUpdate,
+    MealCreateSchema,
+    MealView,
+    MealListView,
+)
 from app.models.meal_dish import MealDishCreate, MealDish
 from app.models.recipe import Recipe
 from app.models.user import User
@@ -20,7 +27,7 @@ class CRUDMeal(CRUDBase[Meal, MealCreate, MealUpdate]):
         user: User,
         start_date: datetime,
         end_date: datetime,
-    ) -> Page[Meal]:
+    ) -> MealListView:
         statement = (
             select(self.model)
             .where(
@@ -32,7 +39,9 @@ class CRUDMeal(CRUDBase[Meal, MealCreate, MealUpdate]):
             .order_by(self.model.date)
         )
 
-        return paginate(db, statement)
+        results = db.exec(statement).all()
+
+        return MealListView(results=results)
 
     def create_with_dishes(
         self, db: Session, user: User, meal_schema: MealCreateSchema

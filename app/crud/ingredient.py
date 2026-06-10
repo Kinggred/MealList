@@ -1,3 +1,4 @@
+from datetime import date
 from typing import List
 from uuid import UUID
 
@@ -13,6 +14,7 @@ from app.models.ingridient import (
     IngredientUpdate,
     IngredientWithTies,
 )
+from app.models.schoping_list import IngredientsCalculationsView, ShoppingListView
 from app.models.user import User
 
 
@@ -75,6 +77,30 @@ class CRUDIngredient(CRUDBase[Ingredient, IngredientCreate, IngredientUpdate]):
     ) -> List[UUID]:
         return ingredient_self_reference_crud.multi_get_derivative_ids(
             db, ingredients_ids
+        )
+
+    def build_shopping_list(
+        self,
+        db: Session,
+        *,
+        date_from: date,
+        date_to: date,
+        calculations: list[IngredientsCalculationsView],
+    ) -> ShoppingListView:
+        ingredient_ids = [calculation.ingredient_id for calculation in calculations]
+
+        ingredients = db.exec(
+            select(Ingredient).where(
+                Ingredient.id.in_(ingredient_ids),
+                Ingredient.enabled == True,
+            )
+        ).all()
+
+        return ShoppingListView.from_calculations(
+            date_from=date_from,
+            date_to=date_to,
+            calculations=calculations,
+            ingredients=ingredients,
         )
 
 

@@ -59,3 +59,6 @@ class MealView(SQLModel):
                 for _, meal_dish, recipe in rows
             ],
         )
+
+class MealListView(SQLModel):
+    results: List[Meal] = []
