@@ -5,6 +5,7 @@ from fastapi_pagination import add_pagination
 from app.api.endpoints.auth import router as auth_router
 from app.api.endpoints.diet import diet_router
 from app.api.endpoints.ingredient import ingredient_router
+from app.api.endpoints.meal import meal_router
 from app.api.endpoints.recipe import recipe_router
 from app.api.endpoints.user import router as user_router
 
@@ -24,6 +25,8 @@ api_router.include_router(
 
 api_router.include_router(recipe_router, prefix="/recipe", tags=["recipe"])
 api_router.include_router(diet_router, prefix="/diet", tags=["diet"])
+
+api_router.include_router(meal_router, prefix="/meal", tags=["meal"])
 
 app.include_router(api_router)
 app.add_middleware(
