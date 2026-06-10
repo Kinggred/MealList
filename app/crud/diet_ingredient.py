@@ -53,7 +53,14 @@ class CRUDDietIngredient(
             for ingredient_id in ingredient_ids
             if ingredient_id in existing_ingredients
         ]
-        self.safe_remove_many(db, user=user, ids=ingredients_to_remove, hard=True)
+
+        diet_ingredients_to_remove = db.exec(
+            select(DietIngredient.id).where(
+                DietIngredient.diet_id == diet_id,
+                DietIngredient.ingredient_id.in_(ingredient_ids),
+            )
+        ).all()
+        self.safe_remove_many(db, user=user, ids=diet_ingredients_to_remove, hard=True)
 
 
 diet_ingredient_crud = CRUDDietIngredient(DietIngredient)
