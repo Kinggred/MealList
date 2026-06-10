@@ -10,6 +10,7 @@ class IngredientSelfReference(BaseModel, table=True):
     contained_id: UUID = Field(foreign_key="ingredient.id")  # RENAME TO BASE INGREDIENT
     is_alternative: bool = Field(default=False)
     include_in_count: bool = Field(default=False)
+    created_by: UUID = Field(default=None, foreign_key="user.id")
 
 
 class IngredientSelfReferenceCreate(SQLModel):

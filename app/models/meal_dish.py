@@ -3,6 +3,7 @@ from uuid import UUID
 from sqlmodel import Field, SQLModel
 
 from app.models.base import BaseModel
+from app.models.recipe import RecipeInDishView
 
 
 class MealDish(BaseModel, table=True):
@@ -11,6 +12,7 @@ class MealDish(BaseModel, table=True):
     recipe_id: UUID = Field(foreign_key="recipe.id")
     full_portions: int
     half_portions: int
+    created_by: UUID = Field(default=None, foreign_key="user.id")
 
 
 class MealDishCreate(SQLModel):
@@ -27,5 +29,10 @@ class MealDishUpdate(SQLModel):
 
 class MealDishCreateSchema(SQLModel):
     recipe_id: UUID
+    full_portions: int
+    half_portions: int
+
+class MealDishView(SQLModel):
+    recipe: RecipeInDishView
     full_portions: int
     half_portions: int

@@ -8,7 +8,9 @@ from typing_extensions import Annotated
 from app.api.auth import get_current_active_user
 from app.api.database import get_session
 from app.crud.meal import meal_crud
-from app.models.meal import MealCreateSchema, Meal, MealUpdate
+from app.crud.meal_dish import meal_dish_crud
+from app.models.meal import MealCreateSchema, Meal, MealUpdate, MealView
+from app.models.meal_dish import MealDishCreateSchema, MealDish, MealDishUpdate
 from app.models.user import User
 
 meal_router = APIRouter()
@@ -36,8 +38,8 @@ def get_meal(
     db: Annotated[Session, Depends(get_session)],
     user: Annotated[User, Depends(get_current_active_user)],
     meal_id: UUID,
-) -> Meal:
-    return meal_crud.get(db, meal_id)
+) -> MealView:
+    return meal_crud.get_with_dishes(db, user, meal_id)
 
 
 @meal_router.patch("/{meal_id}")
@@ -59,3 +61,36 @@ def delete_meal(
     meal_id: UUID,
 ):
     return meal_crud.safe_remove(db, user=user, id=meal_id)
+
+
+@meal_router.post("/{meal_id}/dishes")
+def add_dish(
+    db: Annotated[Session, Depends(get_session)],
+    user: Annotated[User, Depends(get_current_active_user)],
+    meal_id: UUID,
+    dish_to_add: MealDishCreateSchema,
+) -> MealDish:
+    return meal_dish_crud.add_meal_dish(db, user, meal_id, dish_to_add)
+
+
+@meal_router.patch("/{meal_id}/dishes/{meal_dish_id}")
+def update_dish(
+    db: Annotated[Session, Depends(get_session)],
+    user: Annotated[User, Depends(get_current_active_user)],
+    meal_id: UUID,
+    meal_dish_id: UUID,
+    dish_to_update: MealDishUpdate,
+) -> MealDish:
+    return meal_dish_crud.safe_update(
+        db, user=user, id=meal_dish_id, obj_in=dish_to_update
+    )
+
+
+@meal_router.delete("/{meal_id}/dishes/{meal_dish_id}")
+def delete_dish(
+    db: Annotated[Session, Depends(get_session)],
+    user: Annotated[User, Depends(get_current_active_user)],
+    meal_id: UUID,
+    meal_dish_id: UUID,
+):
+    meal_dish_crud.safe_remove(db, user=user, id=meal_dish_id)

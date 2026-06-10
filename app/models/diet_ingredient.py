@@ -8,6 +8,7 @@ class DietIngredient(BaseModel, table=True):
     __tablename__ = "diet_ingredient"
     ingredient_id: UUID = Field(foreign_key="ingredient.id")
     diet_id: UUID = Field(foreign_key="diet.id")
+    created_by: UUID = Field(default=None, foreign_key="user.id")
 
 
 class DietIngredientCreate(SQLModel):

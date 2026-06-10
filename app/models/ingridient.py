@@ -57,3 +57,9 @@ class IngredientWithTies(IngredientCreate):
     id: UUID
     alternatives: List[Ingredient] = []
     contains: ContainedIngredients = ContainedIngredients()
+
+class IngredientInDietView(SQLModel):
+    id: UUID
+    name: str
+    animal_produced: bool
+    animal_derived: bool
