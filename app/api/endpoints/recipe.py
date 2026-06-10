@@ -20,6 +20,7 @@ from app.models.recipe import (
 from app.models.recipe_ingredient import (
     RecipeIngredientCreate,
     RecipeIngredientCreateSchema,
+    RecipeIngredientUpdate,
 )
 from app.models.user import User
 
@@ -95,7 +96,7 @@ def update_ingredient_to_recipe(
     user: Annotated[User, Depends(get_current_active_user)],
     recipe_id: UUID,
     connection_id: UUID,
-    update_data: RecipeUpdate,
+    update_data: RecipeIngredientUpdate,
 ):
     recipe_ingredient_crud.safe_update(
         db, user=user, updated_obj_id=connection_id, obj_in=update_data

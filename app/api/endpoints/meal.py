@@ -1,6 +1,8 @@
+from datetime import date, datetime, time
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
+from fastapi.params import Query
 from fastapi_pagination import Page
 from sqlmodel import Session
 from typing_extensions import Annotated
@@ -20,8 +22,12 @@ meal_router = APIRouter()
 def get_meals(
     db: Annotated[Session, Depends(get_session)],
     user: Annotated[User, Depends(get_current_active_user)],
+    date_from: Annotated[date | None, Query()] = date.today(),
+    date_to: Annotated[date | None, Query()] = date.today(),
 ) -> Page[Meal]:
-    return meal_crud.paginated_get_all(db)
+    start_dt = datetime.combine(date_from, time.min)
+    end_dt = datetime.combine(date_to, time.max)
+    return meal_crud.get_meals_in_range(db, user, start_dt, end_dt)
 
 
 @meal_router.post("/")

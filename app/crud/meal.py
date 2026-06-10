@@ -1,3 +1,8 @@
+from datetime import datetime
+from typing import List
+
+from fastapi_pagination import Page
+from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlmodel import Session, select
 
 from app.crud.base import CRUDBase
@@ -9,6 +14,26 @@ from app.models.user import User
 
 
 class CRUDMeal(CRUDBase[Meal, MealCreate, MealUpdate]):
+    def get_meals_in_range(
+        self,
+        db: Session,
+        user: User,
+        start_date: datetime,
+        end_date: datetime,
+    ) -> Page[Meal]:
+        statement = (
+            select(self.model)
+            .where(
+                self.model.enabled == True,
+                self.model.created_by == user.id,
+                self.model.date >= start_date,
+                self.model.date <= end_date,
+            )
+            .order_by(self.model.date)
+        )
+
+        return paginate(db, statement)
+
     def create_with_dishes(
         self, db: Session, user: User, meal_schema: MealCreateSchema
     ) -> Meal:

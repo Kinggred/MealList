@@ -1,4 +1,5 @@
 from sqlmodel import Session, select
+from uuid import UUID
 
 from app.crud.base import CRUDBase
 from app.crud.recipe_ingredient import recipe_ingredient_crud
@@ -29,7 +30,9 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
 
         return recipe
 
-    def get_recipe_view(self, db: Session, user: User, *, recipe_id: int) -> RecipeView:
+    def get_recipe_view(
+        self, db: Session, user: User, *, recipe_id: UUID
+    ) -> RecipeView:
         statement = (
             select(Recipe, RecipeIngredient, Ingredient)
             .join(RecipeIngredient, Recipe.id == RecipeIngredient.recipe_id)
