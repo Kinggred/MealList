@@ -14,12 +14,15 @@ from app.models.token import Token
 router = APIRouter()
 settings = get_settings()
 
+
 @router.post("/token")
 async def login_for_access_token(
     db: Annotated[Session, Depends(get_session)],
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> Token:
-    user = authenticate_user(db, form_data.username, form_data.password) # USE EMAIL AS USERNAME
+    user = authenticate_user(
+        db, form_data.username, form_data.password
+    )  # USE EMAIL AS USERNAME
     if not user:
         raise UnauthorizedException
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)

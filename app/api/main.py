@@ -1,21 +1,34 @@
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi_pagination import add_pagination
+
 from app.api.endpoints.auth import router as auth_router
+from app.api.endpoints.diet import diet_router
+from app.api.endpoints.ingredient import ingredient_router
+from app.api.endpoints.recipe import recipe_router
 from app.api.endpoints.user import router as user_router
 
 from app.core.settings import get_settings
 
 app = FastAPI()
+add_pagination(app)
 settings = get_settings()
 
-api_router = APIRouter()
+
+api_router = APIRouter(prefix="/api/v1")
+api_router.include_router(auth_router, prefix="/auth", tags=["auth"])
+api_router.include_router(user_router, prefix="/user", tags=["user"])
+api_router.include_router(
+    ingredient_router, prefix="/ingredients", tags=["ingredients"]
+)
+
+api_router.include_router(recipe_router, prefix="/recipe", tags=["recipe"])
+api_router.include_router(diet_router, prefix="/diet", tags=["diet"])
 
 app.include_router(api_router)
-app.include_router(auth_router)
-app.include_router(user_router)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.ALLOWED_CORS_ORIGINS.split(","),
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

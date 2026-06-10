@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import UUID
 
-from sqlmodel import Field, SQLModel, func, text
+from sqlmodel import Field, SQLModel, func, text, Column, DateTime
 
 
 class BaseModel(SQLModel):

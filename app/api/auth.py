@@ -17,7 +17,7 @@ from app.crud.user import crud_user
 
 pwd_hash = PasswordHash.recommended()
 settings = get_settings()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/v1/auth/token")
 
 
 def verify_password(plain_password, hashed_password):
@@ -26,6 +26,7 @@ def verify_password(plain_password, hashed_password):
 
 def get_password_hash(password):
     return pwd_hash.hash(password)
+
 
 def authenticate_user(db: Session, email: str, password: str) -> User | None:
     user = crud_user.get_user_by_email(db, email=email)
@@ -41,13 +42,20 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     else:
         expire = datetime.now(timezone.utc) + timedelta(minutes=15)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+    encoded_jwt = jwt.encode(
+        to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM
+    )
     return encoded_jwt
 
 
-async def get_current_user(db: Annotated[Session, Depends(get_session)], token: Annotated[str, Depends(oauth2_scheme)]):
+async def get_current_user(
+    db: Annotated[Session, Depends(get_session)],
+    token: Annotated[str, Depends(oauth2_scheme)],
+):
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+        )
         email = payload.get("sub")
         if email is None:
             raise UnauthorizedException
