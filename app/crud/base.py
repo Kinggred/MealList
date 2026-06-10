@@ -27,18 +27,51 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self.assigned = True if "created_by" in self.model.model_fields else False
         self.delete_softly = True if "enabled" in self.model.model_fields else False
 
-    # TODO: Consider adding some kind of rollback on error.
     def db_add_operation(self, db: Session, object_to_add: ModelType) -> ModelType:
         try:
             db.add(object_to_add)
             db.commit()
             db.refresh(object_to_add)
+
         except IntegrityError as error:
+            db.rollback()
             logger.error(f"Database error: {error.orig}")
             raise DatabaseException()
+
+        except Exception as error:
+            db.rollback()
+            logger.error(f"Unexpected database error: {error}")
+            raise
+
         logger.info(f"Added {self.model.__name__}: {object_to_add.id}")
 
         return object_to_add
+
+    def db_add_many_operation(
+        self,
+        db: Session,
+        objects_to_add: list[ModelType],
+    ) -> list[ModelType]:
+        try:
+            db.add_all(objects_to_add)
+            db.commit()
+
+            for object_to_add in objects_to_add:
+                db.refresh(object_to_add)
+
+        except IntegrityError as error:
+            db.rollback()
+            logger.error(f"Database error: {error.orig}")
+            raise DatabaseException()
+
+        except Exception as error:
+            db.rollback()
+            logger.error(f"Unexpected database error: {error}")
+            raise
+
+        logger.info(f"Added {len(objects_to_add)} {self.model.__name__} objects")
+
+        return objects_to_add
 
     def safe_get(self, db: Session, id: UUID, *args, **kwargs) -> ModelType:
         data = self.get(db, id)
@@ -89,6 +122,36 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
         return obj
 
+    def create_many(
+        self,
+        db: Session,
+        *,
+        user: User | None,
+        objs_in: list[CreateSchemaType],
+    ) -> list[ModelType]:
+        if self.assigned and user is None:
+            raise DatabaseException()
+
+        db_objs: list[ModelType] = []
+
+        for obj_in in objs_in:
+            obj_in_data = jsonable_encoder(obj_in)
+            db_obj = self.model(**obj_in_data)  # type: ignore
+
+            if self.assigned:
+                db_obj.created_by = user.id
+
+            db_objs.append(db_obj)
+
+        objs = self.db_add_many_operation(
+            db=db,
+            objects_to_add=db_objs,
+        )
+
+        logger.info(f"Created {len(objs)} {self.model.__name__} objects")
+
+        return objs
+
     def safe_update(
         self,
         db: Session,
@@ -123,16 +186,116 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
         return obj
 
-    def safe_remove(self, db: Session, user: User, *, id: UUID) -> ModelType:
-        # TODO: Add checks for resources using the one removed
-        db_obj = self.safe_get(db, id)
-        if user.id != db_obj.created_by:
-            raise ForbiddenException
-        return self.remove(db, db_obj=db_obj)
+    def remove_many(
+        self,
+        db: Session,
+        *,
+        db_objs: list[ModelType],
+        hard: bool = False,
+    ) -> list[ModelType]:
+        try:
+            for db_obj in db_objs:
+                if hard:
+                    db.delete(db_obj)
+                else:
+                    db_obj.enabled = False
+                    db.add(db_obj)
 
-    def remove(self, db: Session, *, db_obj: ModelType) -> ModelType:
-        db_obj.enabled = False
-        db.commit()
-        logger.info(f"Removed {self.model.__name__}: {db_obj.id}")
+            db.commit()
+
+            if not hard:
+                for db_obj in db_objs:
+                    db.refresh(db_obj)
+
+        except IntegrityError as error:
+            db.rollback()
+            logger.error(f"Database error: {error.orig}")
+            raise DatabaseException()
+
+        except Exception as error:
+            db.rollback()
+            logger.error(f"Unexpected database error: {error}")
+            raise
+
+        logger.info(
+            f"{'Hard deleted' if hard else 'Removed'} "
+            f"{len(db_objs)} {self.model.__name__} objects"
+        )
+
+        return db_objs
+
+    def remove(
+        self,
+        db: Session,
+        *,
+        db_obj: ModelType,
+        hard: bool = False,
+    ) -> ModelType:
+        try:
+            if hard:
+                db.delete(db_obj)
+            else:
+                db_obj.enabled = False
+                db.add(db_obj)
+
+            db.commit()
+
+            if not hard:
+                db.refresh(db_obj)
+
+        except IntegrityError as error:
+            db.rollback()
+            logger.error(f"Database error: {error.orig}")
+            raise DatabaseException()
+
+        except Exception as error:
+            db.rollback()
+            logger.error(f"Unexpected database error: {error}")
+            raise
+
+        logger.info(
+            f"{'Hard deleted' if hard else 'Removed'} "
+            f"{self.model.__name__}: {db_obj.id}"
+        )
 
         return db_obj
+
+    def safe_remove(
+        self,
+        db: Session,
+        user: User,
+        *,
+        id: UUID,
+        hard: bool = False,
+    ) -> ModelType:
+        db_obj = self.safe_get(db, id)
+
+        if self.assigned and db_obj.created_by != user.id:
+            raise ForbiddenException()
+
+        return self.remove(
+            db,
+            db_obj=db_obj,
+            hard=hard,
+        )
+
+    def safe_remove_many(
+        self,
+        db: Session,
+        user: User,
+        *,
+        ids: list[UUID],
+        hard: bool = False,
+    ) -> list[ModelType]:
+        db_objs = [self.safe_get(db, id) for id in ids]
+
+        if self.assigned:
+            for db_obj in db_objs:
+                if db_obj.created_by != user.id:
+                    raise ForbiddenException()
+
+        return self.remove_many(
+            db,
+            db_objs=db_objs,
+            hard=hard,
+        )

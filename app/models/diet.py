@@ -50,3 +50,7 @@ class DietView(SQLModel):
                 for _, ingredient in rows
             ],
         )
+
+class UpdateIngredientsInDietSchema(SQLModel):
+    add: List[UUID]
+    remove: List[UUID]

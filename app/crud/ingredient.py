@@ -1,9 +1,11 @@
+from typing import List
 from uuid import UUID
 
 from sqlmodel import Session, select, or_
 
 from app.api.exceptions import NotFoundException
 from app.crud.base import CRUDBase, CreateSchemaType, ModelType
+from app.crud.ingredient_self_reference import ingredient_self_reference_crud
 from app.models.ingredient_self_reference import IngredientSelfReference
 from app.models.ingridient import (
     Ingredient,
@@ -63,5 +65,17 @@ class CRUDIngredient(CRUDBase[Ingredient, IngredientCreate, IngredientUpdate]):
 
         return response
 
+    def get_derivatives(
+        self, db: Session, *, ingredient_id: UUID
+    ) -> IngredientSelfReference:
+        return ingredient_self_reference_crud.get_ids_of_derivatives(db, ingredient_id)
 
-crud_ingredient = CRUDIngredient(Ingredient)
+    def multi_get_derivative_ids(
+        self, db: Session, *, ingredients_ids: List[UUID]
+    ) -> List[UUID]:
+        return ingredient_self_reference_crud.multi_get_derivative_ids(
+            db, ingredients_ids
+        )
+
+
+ingredient_crud = CRUDIngredient(Ingredient)

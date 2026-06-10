@@ -9,7 +9,13 @@ from sqlalchemy.orm import Session
 from app.api.auth import get_current_active_user
 from app.api.database import get_session
 from app.crud.diet import diet_crud
-from app.models.diet import DietCreateSchema, Diet, DietUpdate, DietView
+from app.models.diet import (
+    DietCreateSchema,
+    Diet,
+    DietUpdate,
+    DietView,
+    UpdateIngredientsInDietSchema,
+)
 from app.models.user import User
 
 diet_router = APIRouter()
@@ -58,3 +64,13 @@ def delete_diet(
     diet_id: UUID,
 ):
     diet_crud.safe_remove(db, user, diet_id)
+
+
+@diet_router.patch("/{diet_id}/ingredients")
+def update_ingredients(
+    db: Annotated[Session, Depends(get_session)],
+    user: Annotated[User, Depends(get_current_active_user)],
+    diet_id: UUID,
+    update_data: UpdateIngredientsInDietSchema,
+):
+    return diet_crud.update_ingredients(db, user, diet_id, update_data)
