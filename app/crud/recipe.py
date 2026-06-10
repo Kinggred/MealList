@@ -1,9 +1,16 @@
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 from app.crud.base import CRUDBase
 from app.crud.recipe_ingredient import recipe_ingredient_crud
-from app.models.recipe import RecipeCreate, RecipeUpdate, Recipe, RecipeCreateSchema
-from app.models.recipe_ingredient import RecipeIngredientCreate
+from app.models.ingridient import Ingredient
+from app.models.recipe import (
+    RecipeCreate,
+    RecipeUpdate,
+    Recipe,
+    RecipeCreateSchema,
+    RecipeView,
+)
+from app.models.recipe_ingredient import RecipeIngredientCreate, RecipeIngredient
 from app.models.user import User
 
 
@@ -21,6 +28,16 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
             recipe_ingredient_crud.create(db, user=user, obj_in=ingredient_to_add)
 
         return recipe
+
+    def get_recipe_view(self, db: Session, user: User, *, recipe_id: int) -> RecipeView:
+        statement = (
+            select(Recipe, RecipeIngredient, Ingredient)
+            .join(RecipeIngredient, Recipe.id == RecipeIngredient.recipe_id)
+            .join(Ingredient, RecipeIngredient.ingredient_id == Ingredient.id)
+            .where(Recipe.id == recipe_id, Recipe.created_by == user.id)
+        )
+        recipe_with_dishes = db.exec(statement).all()
+        return RecipeView.from_rows(recipe_with_dishes)
 
 
 recipe_crud = CRUDRecipe(Recipe)

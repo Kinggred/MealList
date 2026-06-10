@@ -9,7 +9,13 @@ from sqlmodel import Session
 from app.api.auth import get_current_active_user
 from app.api.database import get_session
 from app.crud.recipe import recipe_crud
-from app.models.recipe import RecipeCreate, Recipe, RecipeCreateSchema, RecipeUpdate
+from app.models.recipe import (
+    RecipeCreate,
+    Recipe,
+    RecipeCreateSchema,
+    RecipeUpdate,
+    RecipeView,
+)
 from app.models.user import User
 
 recipe_router = APIRouter()
@@ -37,8 +43,8 @@ def get_recipe(
     db: Annotated[Session, Depends(get_session)],
     user: Annotated[User, Depends(get_current_active_user)],
     recipe_id: UUID,
-) -> Recipe:
-    return recipe_crud.safe_get(db, id=recipe_id)
+) -> RecipeView:
+    return recipe_crud.get_recipe_view(db, user=user, recipe_id=recipe_id)
 
 
 @recipe_router.patch("/{recipe_id}")

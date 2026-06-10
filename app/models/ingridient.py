@@ -4,6 +4,7 @@ from typing import List
 from sqlmodel import Field, SQLModel
 from uuid import UUID
 from app.models.base import BaseModel
+from app.models.recipe_ingredient import RecipeIngredient
 
 
 class Units(StrEnum):
@@ -71,4 +72,38 @@ class IngredientInDietView(SQLModel):
             name=ingredient.name,
             animal_produced=ingredient.animal_produced,
             animal_derived=ingredient.animal_derived,
+        )
+class IngredientInRecipeView(SQLModel):
+    id: UUID
+    name: str
+    counted_calories: int
+    counted_cost: float
+    amount: float
+    unit_of_measurement: Units
+
+    @classmethod
+    def from_models(
+        cls,
+        recipe_ingredient: "RecipeIngredient",
+        ingredient: Ingredient,
+    ) -> IngredientInRecipeView:
+        counted_calories = int(
+            ingredient.calories
+            * recipe_ingredient.amount
+            / ingredient.amount_per_cost
+        )
+
+        counted_cost = (
+            ingredient.cost
+            * recipe_ingredient.amount
+            / ingredient.amount_per_cost
+        )
+
+        return cls(
+            id=ingredient.id,
+            name=ingredient.name,
+            counted_calories=counted_calories,
+            counted_cost=round(counted_cost, 2),
+            amount=recipe_ingredient.amount,
+            unit_of_measurement=ingredient.unit_of_measurement,
         )
