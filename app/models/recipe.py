@@ -1,7 +1,7 @@
 from sqlmodel import JSON, Field, Column, SQLModel
 from typing import Dict, List
 from app.models.base import BaseModel
-from app.models.recipe_ingredient import RecipeIngredientCreateView
+from app.models.recipe_ingredient import RecipeIngredientCreateSchema
 
 
 class Recipe(BaseModel, table=True):
@@ -14,8 +14,8 @@ class RecipeCreate(SQLModel):
     image: str
 
 
-class RecipeCreateView(RecipeCreate):
-    ingredients: List[RecipeIngredientCreateView]
+class RecipeCreateSchema(RecipeCreate):
+    ingredients: List[RecipeIngredientCreateSchema]
 
 
 class RecipeUpdate(SQLModel):

@@ -1,15 +1,15 @@
 from sqlmodel import Session
 
-from app.crud.base import CRUDBase, CreateSchemaType, ModelType
+from app.crud.base import CRUDBase
 from app.crud.recipe_ingredient import recipe_ingredient_crud
-from app.models.recipe import RecipeCreate, RecipeUpdate, Recipe, RecipeCreateView
+from app.models.recipe import RecipeCreate, RecipeUpdate, Recipe, RecipeCreateSchema
 from app.models.recipe_ingredient import RecipeIngredientCreate
 from app.models.user import User
 
 
 class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
     def create_with_ingredients(
-        self, db: Session, user: User, recipe_view: RecipeCreateView
+        self, db: Session, user: User, recipe_view: RecipeCreateSchema
     ) -> Recipe:
         recipe_create = RecipeCreate(**recipe_view.model_dump())
         recipe = self.create(db, user=user, obj_in=recipe_create)

@@ -12,12 +12,12 @@ class RecipeIngredient(BaseModel, table=True):
     amount: float
 
 
-class RecipeIngredientCreateView(SQLModel):
+class RecipeIngredientCreateSchema(SQLModel):
     ingredient_id: UUID
     amount: float
 
 
-class RecipeIngredientCreate(RecipeIngredientCreateView):
+class RecipeIngredientCreate(RecipeIngredientCreateSchema):
     recipe_id: UUID
 
 
