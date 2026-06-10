@@ -18,15 +18,15 @@ settings = get_settings()
 
 api_router = APIRouter(prefix="/api/v1")
 api_router.include_router(auth_router, prefix="/auth", tags=["auth"])
-api_router.include_router(user_router, prefix="/user", tags=["user"])
+api_router.include_router(user_router, prefix="/users", tags=["user"])
 api_router.include_router(
     ingredient_router, prefix="/ingredients", tags=["ingredients"]
 )
 
-api_router.include_router(recipe_router, prefix="/recipe", tags=["recipe"])
-api_router.include_router(diet_router, prefix="/diet", tags=["diet"])
+api_router.include_router(recipe_router, prefix="/recipes", tags=["recipe"])
+api_router.include_router(diet_router, prefix="/diets", tags=["diet"])
 
-api_router.include_router(meal_router, prefix="/meal", tags=["meal"])
+api_router.include_router(meal_router, prefix="/meals", tags=["meal"])
 
 app.include_router(api_router)
 app.add_middleware(
