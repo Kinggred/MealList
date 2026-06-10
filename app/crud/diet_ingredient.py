@@ -41,18 +41,6 @@ class CRUDDietIngredient(
         self, db: Session, user: User, diet_id: UUID, ingredient_ids: List[UUID]
     ):
         ingredient_ids = ingredient_crud.multi_get_derivative_ids(db, ingredient_ids)
-        existing_ingredients = db.exec(
-            select(DietIngredient.id).where(
-                DietIngredient.diet_id == diet_id,
-                DietIngredient.ingredient_id.in_(ingredient_ids),
-            )
-        )
-
-        ingredients_to_remove = [
-            ingredient_id
-            for ingredient_id in ingredient_ids
-            if ingredient_id in existing_ingredients
-        ]
 
         diet_ingredients_to_remove = db.exec(
             select(DietIngredient.id).where(
