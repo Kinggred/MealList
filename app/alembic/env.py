@@ -14,6 +14,8 @@ from app.models.recipe import Recipe
 from app.models.recipe_ingredient import RecipeIngredient
 from app.models.ingredient_self_reference import IngredientSelfReference
 from app.models.diet import Diet
+from app.models.meal import Meal
+from app.models.meal_dish import MealDish
 
 config = context.config
 if config.config_file_name is not None:
