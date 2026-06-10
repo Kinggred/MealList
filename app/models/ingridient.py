@@ -63,3 +63,12 @@ class IngredientInDietView(SQLModel):
     name: str
     animal_produced: bool
     animal_derived: bool
+
+    @classmethod
+    def from_model(cls, ingredient: Ingredient) -> IngredientInDietView:
+        return cls(
+            id=ingredient.id,
+            name=ingredient.name,
+            animal_produced=ingredient.animal_produced,
+            animal_derived=ingredient.animal_derived,
+        )

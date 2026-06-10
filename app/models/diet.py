@@ -28,7 +28,25 @@ class DietCreateSchema(SQLModel):
     ingredients: List[UUID]
 
 class DietView(SQLModel):
-    id: int
+    id: UUID
     name: str
     content: dict[str, str]
     ingredients: List[IngredientInDietView]
+
+    @classmethod
+    def from_rows(cls, rows) -> DietView:
+        """
+        :param rows: (Diet Ingredients)
+        :return: DietView
+        """
+        diet = rows[0][0]
+
+        return cls(
+            id=diet.id,
+            name=diet.name,
+            content=diet.content,
+            ingredients=[
+                IngredientInDietView.from_model(ingredient)
+                for _, ingredient in rows
+            ],
+        )

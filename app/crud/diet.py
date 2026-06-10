@@ -1,8 +1,11 @@
-from sqlmodel import Session
+from sqlmodel import Session, select
+from uuid import UUID
+
 from app.crud.base import CRUDBase
 from app.crud.diet_ingredient import diet_ingredient_crud
-from app.models.diet import DietCreate, Diet, DietUpdate, DietCreateSchema
+from app.models.diet import DietCreate, Diet, DietUpdate, DietCreateSchema, DietView
 from app.models.diet_ingredient import DietIngredientCreate, DietIngredient
+from app.models.ingridient import Ingredient
 from app.models.user import User
 
 
@@ -17,6 +20,16 @@ class CRUDDiet(CRUDBase[Diet, DietCreate, DietUpdate]):
             )
             diet_ingredient_crud.create(db, user=user, obj_in=diet_ingredient_create)
         return diet
+
+    def get_with_ingredients(self, db: Session, diet_id: UUID) -> DietView:
+        statement = (
+            select(Diet, Ingredient)
+            .join(DietIngredient, Diet.id == DietIngredient.diet_id)
+            .join(Ingredient, DietIngredient.ingredient_id == Ingredient.id)
+            .where(Diet.id == diet_id)
+        )
+        rows = db.exec(statement).all()
+        return DietView.from_rows(rows)
 
 
 diet_crud = CRUDDiet(Diet)

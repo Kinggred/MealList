@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from app.api.auth import get_current_active_user
 from app.api.database import get_session
 from app.crud.diet import diet_crud
-from app.models.diet import DietCreateSchema, Diet, DietUpdate
+from app.models.diet import DietCreateSchema, Diet, DietUpdate, DietView
 from app.models.user import User
 
 diet_router = APIRouter()
@@ -37,8 +37,8 @@ def get_diet(
     db: Annotated[Session, Depends(get_session)],
     user: Annotated[User, Depends(get_current_active_user)],
     diet_id: UUID,
-) -> Diet:
-    return diet_crud.safe_get(db, diet_id)
+) -> DietView:
+    return diet_crud.get_with_ingredients(db, diet_id)
 
 
 @diet_router.patch("/{diet_id}")
