@@ -1,26 +1,82 @@
-<h1>MealList API</h1>
-<h2>Goals</h2>
-Goal of this application is to streamline organization in a professional kitchen.
-It allows to register ingredients, their cost, caloric data etc. and tie them into specific recipies.
-Recipies can be used to plan full meals per x amount of servings and taking into account specific dietary needs of customers via Diets.
-Such data makes shopping calculations essentially non-existent as MealList can then sum ingredients necessary to create planned meals and estimate cost among generated shopping list.
+# MealList API
 
-<h2>Vocab</h2>
-* Ingredient - Specific product or produce
-* Recipe - List of Ingredients with amounts dosed per single serving
-* Dish - X amount of servings of specific recipe
-* Meal - X amount of Dishes planned to be served at the same time
-* Diet - Set of Ingredients allowed to be served.
+## Goals
 
-<h2>Ingredient connectabilty</h2>
-To allow for a more streamlined setting of diets it is possible to interconnect Ingredients with each other.
-Such many-many relation can define if a certain ingredient contains another one f.e. Butter contains Milk which is important in dietary means 
-or alternatively it can be defined as an alternative f.e. Butter - Margarine
+The goal of this application is to streamline organization in a professional kitchen.
 
+MealList allows users to register ingredients, including their cost, caloric value, and other nutritional information, and combine them into recipes. Recipes can then be used to plan meals for a specific number of servings while taking dietary requirements into account through diets.
 
-<h2>Auth</h2>
-Currently standard OAuth2 Password Nearer auth is supported.
-All resources are readable for all users, but can be updated by their authors only.
+By linking ingredients, recipes, meals, and diets together, MealList can automatically generate shopping lists, calculate ingredient requirements, and estimate total costs for planned meals.
 
-<h2>Database Schema</h2>
-![DbSchema.png](docs/DbSchema.png)
+---
+
+## Vocabulary
+
+- **Ingredient** – A specific product or produce item.
+- **Recipe** – A collection of ingredients with quantities specified per single serving.
+- **Dish** – A specified number of servings of a recipe.
+- **Meal** – One or more dishes planned to be served at the same time.
+- **Diet** – A set of rules defining which ingredients are allowed or disallowed.
+
+---
+
+## Ingredient Connectivity
+
+To simplify diet management, ingredients can be connected to one another through self-referencing relationships.
+
+These relationships can represent:
+
+### Containment
+
+An ingredient may contain another ingredient.
+
+Example:
+
+```text
+Butter → contains → Milk
+```
+
+This allows dietary restrictions to propagate correctly. A customer avoiding milk products should also avoid butter.
+
+### Alternatives
+
+An ingredient may be marked as an alternative to another ingredient.
+
+Example:
+
+```text
+Butter ↔ Margarine
+```
+
+This enables recipe substitutions and dietary adaptations.
+
+---
+
+## Authentication & Authorization
+
+MealList currently uses OAuth2 Password Bearer authentication.
+
+### Permissions
+
+- All authenticated users can read all resources.
+- Resources may only be modified by their authors.
+- Authentication is required for creating, updating, or deleting resources.
+
+---
+
+## Database Schema
+
+![Database Schema](docs/DBSchema.png)
+
+---
+
+## Planned Features
+
+- Recipe management
+- Meal planning calendar
+- Diet management
+- Shopping list generation
+- Cost estimation
+- Nutritional analysis
+- Inventory tracking
+- Ingredient substitution recommendations
