@@ -23,8 +23,8 @@ diet_router = APIRouter()
 
 @diet_router.get("/")
 def get_diets(
-    db: Session = Depends(get_session),
-    user: User = Depends(get_current_active_user),
+    db: Annotated[Session, Depends(get_session)],
+    user: Annotated[User, Depends(get_current_active_user)],
 ) -> Page[Diet]:
     return diet_crud.paginated_get_all(db)
 

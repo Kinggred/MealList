@@ -59,22 +59,30 @@ class IngredientWithTies(IngredientCreate):
     alternatives: List[Ingredient] = []
     contains: ContainedIngredients = ContainedIngredients()
 
+
 class IngredientInDietView(SQLModel):
     id: UUID
+    connection_id: UUID
     name: str
     animal_produced: bool
     animal_derived: bool
 
     @classmethod
-    def from_model(cls, ingredient: Ingredient) -> IngredientInDietView:
+    def from_model(
+        cls, ingredient: Ingredient, connection_id: UUID
+    ) -> IngredientInDietView:
         return cls(
             id=ingredient.id,
+            connection_id=connection_id,
             name=ingredient.name,
             animal_produced=ingredient.animal_produced,
             animal_derived=ingredient.animal_derived,
         )
+
+
 class IngredientInRecipeView(SQLModel):
     id: UUID
+    connection_id: UUID
     name: str
     counted_calories: int
     counted_cost: float
@@ -88,19 +96,16 @@ class IngredientInRecipeView(SQLModel):
         ingredient: Ingredient,
     ) -> IngredientInRecipeView:
         counted_calories = int(
-            ingredient.calories
-            * recipe_ingredient.amount
-            / ingredient.amount_per_cost
+            ingredient.calories * recipe_ingredient.amount / ingredient.amount_per_cost
         )
 
         counted_cost = (
-            ingredient.cost
-            * recipe_ingredient.amount
-            / ingredient.amount_per_cost
+            ingredient.cost * recipe_ingredient.amount / ingredient.amount_per_cost
         )
 
         return cls(
             id=ingredient.id,
+            connection_id=recipe_ingredient.id,
             name=ingredient.name,
             counted_calories=counted_calories,
             counted_cost=round(counted_cost, 2),

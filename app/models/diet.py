@@ -27,6 +27,7 @@ class DietCreateSchema(SQLModel):
     content: dict[str, str] = {}
     ingredients: List[UUID]
 
+
 class DietView(SQLModel):
     id: UUID
     name: str
@@ -46,10 +47,11 @@ class DietView(SQLModel):
             name=diet.name,
             content=diet.content,
             ingredients=[
-                IngredientInDietView.from_model(ingredient)
-                for _, ingredient in rows
+                IngredientInDietView.from_model(ingredient, connection_id)
+                for _, connection_id, ingredient in rows
             ],
         )
+
 
 class UpdateIngredientsInDietSchema(SQLModel):
     add: List[UUID]

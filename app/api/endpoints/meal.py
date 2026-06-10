@@ -73,24 +73,24 @@ def add_dish(
     return meal_dish_crud.add_meal_dish(db, user, meal_id, dish_to_add)
 
 
-@meal_router.patch("/{meal_id}/dishes/{meal_dish_id}")
+@meal_router.patch("/{meal_id}/dishes/{connection_id}")
 def update_dish(
     db: Annotated[Session, Depends(get_session)],
     user: Annotated[User, Depends(get_current_active_user)],
     meal_id: UUID,
-    meal_dish_id: UUID,
+    connection_id: UUID,
     dish_to_update: MealDishUpdate,
 ) -> MealDish:
     return meal_dish_crud.safe_update(
-        db, user=user, id=meal_dish_id, obj_in=dish_to_update
+        db, user=user, id=connection_id, obj_in=dish_to_update
     )
 
 
-@meal_router.delete("/{meal_id}/dishes/{meal_dish_id}")
+@meal_router.delete("/{meal_id}/dishes/{connection_id}")
 def delete_dish(
     db: Annotated[Session, Depends(get_session)],
     user: Annotated[User, Depends(get_current_active_user)],
     meal_id: UUID,
-    meal_dish_id: UUID,
+    connection_id: UUID,
 ):
-    meal_dish_crud.safe_remove(db, user=user, id=meal_dish_id)
+    meal_dish_crud.safe_remove(db, user=user, id=connection_id)

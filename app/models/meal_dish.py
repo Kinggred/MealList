@@ -32,7 +32,9 @@ class MealDishCreateSchema(SQLModel):
     full_portions: int
     half_portions: int
 
+
 class MealDishView(SQLModel):
+    connection_id: UUID
     recipe: RecipeInDishView
     full_portions: int
     half_portions: int

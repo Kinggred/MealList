@@ -29,6 +29,7 @@ class MealCreateSchema(SQLModel):
     date: datetime
     dishes: List[MealDishCreateSchema]
 
+
 class MealView(SQLModel):
     name: str
     date: datetime
@@ -50,6 +51,7 @@ class MealView(SQLModel):
             date=meal.date,
             dishes=[
                 MealDishView(
+                    connection_id=meal_dish.id,
                     recipe=recipe,
                     full_portions=meal_dish.full_portions,
                     half_portions=meal_dish.half_portions,

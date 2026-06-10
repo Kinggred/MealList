@@ -30,7 +30,7 @@ class CRUDDiet(CRUDBase[Diet, DietCreate, DietUpdate]):
 
     def get_with_ingredients(self, db: Session, diet_id: UUID) -> DietView:
         statement = (
-            select(Diet, Ingredient)
+            select(Diet, DietIngredient.id, Ingredient)
             .join(DietIngredient, Diet.id == DietIngredient.diet_id)
             .join(Ingredient, DietIngredient.ingredient_id == Ingredient.id)
             .where(Diet.id == diet_id)

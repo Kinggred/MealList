@@ -30,9 +30,11 @@ class RecipeUpdate(SQLModel):
     text: dict[str, str] | None
     image: str | None
 
+
 class RecipeInDishView(SQLModel):
     id: UUID
     name: str
+
 
 class RecipeView(SQLModel):
     id: UUID
