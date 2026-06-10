@@ -3,6 +3,7 @@ from typing import Any, Dict, Generic, List, Type, TypeVar
 from uuid import UUID
 
 from fastapi.encoders import jsonable_encoder
+from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy.exc import (
     IntegrityError,
@@ -10,7 +11,7 @@ from sqlalchemy.exc import (
 from sqlmodel import Session, SQLModel, select
 
 from app.models.base import BaseModel
-from app.api.exceptions import DatabaseException, NotFoundException
+from app.api.exceptions import DatabaseException, NotFoundException, ForbiddenException
 from app.models.user import User
 
 ModelType = TypeVar("ModelType", bound=BaseModel)
@@ -24,6 +25,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     def __init__(self, model: Type[ModelType]):
         self.model = model
         self.assigned = True if "created_by" in self.model.model_fields else False
+        self.delete_softly = True if "enabled" in self.model.model_fields else False
 
     # TODO: Consider adding some kind of rollback on error.
     def db_add_operation(self, db: Session, object_to_add: ModelType) -> ModelType:
@@ -38,12 +40,18 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
         return object_to_add
 
-    def get(self, db: Session, id: UUID, *args, **kwargs) -> ModelType | None:
-        data = db.exec(select(self.model).where(self.model.id == id)).first()
+    def safe_get(self, db: Session, id: UUID, *args, **kwargs) -> ModelType:
+        data = self.get(db, id)
         if data:
             logger.info(f"Retreived {self.model.__name__}: {id}")
             return data
         raise NotFoundException
+
+    def get(self, db: Session, id: UUID, *args, **kwargs) -> ModelType | None:
+        statement = select(self.model).where(
+            self.model.id == id, self.model.enabled == True
+        )
+        data = db.exec(statement).first()
 
     def get_all(
         self,
@@ -51,12 +59,14 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         *,
         limit: int,
     ) -> List[ModelType]:
-        obj = db.exec(select(self.model).limit(limit)).all()
+        obj = db.exec(
+            select(self.model).where(self.model.enabled == True).limit(limit)
+        ).all()
         logger.info(f"Retreived {len(obj)} {self.model.__name__}s")
 
         return obj
 
-    def paginated_get_all(self, db: Session) -> List[ModelType]:
+    def paginated_get_all(self, db: Session) -> Page[ModelType]:
         statement = (
             select(self.model)
             .where(self.model.enabled == True)
@@ -79,6 +89,20 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
         return obj
 
+    def safe_update(
+        self,
+        db: Session,
+        *,
+        user: User,
+        updated_obj_id: UUID,
+        obj_in: UpdateSchemaType,
+        **kwargs,
+    ) -> ModelType:
+        current_obj = self.safe_get(db, updated_obj_id)
+        if user.id != current_obj.created_by:
+            raise ForbiddenException
+        return self.update(db, db_obj=current_obj, obj_in=obj_in)
+
     def update(
         self,
         db: Session,
@@ -99,10 +123,14 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
 
         return obj
 
-    def remove(self, db: Session, *, id: UUID) -> ModelType:
-        db_obj = db.exec(select(self.model).where(self.model.id == id)).first()
-        if not db_obj:
-            raise NotFoundException
+    def safe_remove(self, db: Session, user: User, *, id: UUID) -> ModelType:
+        # TODO: Add checks for resources using the one removed
+        db_obj = self.safe_get(db, id)
+        if user.id != db_obj.created_by:
+            raise ForbiddenException
+        return self.remove(db, db_obj=db_obj)
+
+    def remove(self, db: Session, *, db_obj: ModelType) -> ModelType:
         db_obj.enabled = False
         db.commit()
         logger.info(f"Removed {self.model.__name__}: {db_obj.id}")

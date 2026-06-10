@@ -18,6 +18,7 @@ from app.models.ingridient import (
     IngredientResponse,
     IngredientCreate,
     IngredientWithTies,
+    IngredientUpdate,
 )
 from app.models.user import User
 
@@ -41,8 +42,41 @@ def create_ingredient(
     return crud_ingredient.create(db=db, user=user, obj_in=ingredient)
 
 
+@ingredient_router.get("/{ingredient_id}", response_model=IngredientWithTies)
+def get_ingredient(
+    db: Annotated[Session, Depends(get_session)],
+    user: Annotated[User, Depends(get_current_active_user)],
+    ingredient_id: str,
+):
+    return crud_ingredient.get_ingredient_with_ties(db=db, id=ingredient_id)
+
+
+@ingredient_router.patch("/{ingredient_id}")
+def update_ingredient(
+    db: Annotated[Session, Depends(get_session)],
+    user: Annotated[User, Depends(get_current_active_user)],
+    ingredient_id: str,
+    ingredient: IngredientUpdate,
+) -> IngredientResponse:
+    return crud_ingredient.safe_update(
+        db=db,
+        user=user,
+        updated_obj_id=ingredient_id,
+        ingredient=ingredient,
+    )
+
+
+@ingredient_router.delete("/{ingredient_id}")
+def delete_ingredient(
+    db: Annotated[Session, Depends(get_session)],
+    user: Annotated[User, Depends(get_current_active_user)],
+    ingredient_id: str,
+):
+    return crud_ingredient.safe_remove(db=db, user=user, id=ingredient_id)
+
+
 @ingredient_router.post(
-    "/{ingredient_id}",
+    "/ties/{ingredient_id}",
     description="Tie ingredient as an alternative or simply as sub-ingredient",
 )
 def tie_ingredients(
@@ -55,12 +89,3 @@ def tie_ingredients(
         **create_ingredient_tie.model_dump(), ingredient_id=ingredient_id
     )
     ingredient_self_reference_crud.create(db=db, user=user, obj_in=obj_in)
-
-
-@ingredient_router.get("/{ingredient_id}", response_model=IngredientWithTies)
-def get_ingredient(
-    db: Annotated[Session, Depends(get_session)],
-    user: Annotated[User, Depends(get_current_active_user)],
-    ingredient_id: str,
-):
-    return crud_ingredient.get_ingredient_with_ties(db=db, id=ingredient_id)

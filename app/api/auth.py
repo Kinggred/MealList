@@ -56,7 +56,7 @@ async def get_current_user(
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
         )
-        email = payload.get("sub")
+        email = payload.safe_get("sub")
         if email is None:
             raise UnauthorizedException
         token_data = TokenData(email=email)
