@@ -1,8 +1,4 @@
-from typing import List
-from uuid import UUID
-
 from sqlmodel import Session
-
 from app.crud.base import CRUDBase
 from app.crud.diet_ingredient import diet_ingredient_crud
 from app.models.diet import DietCreate, Diet, DietUpdate, DietCreateSchema
@@ -23,4 +19,4 @@ class CRUDDiet(CRUDBase[Diet, DietCreate, DietUpdate]):
         return diet
 
 
-diet_crud = CRUDDiet(DietIngredient)
+diet_crud = CRUDDiet(Diet)

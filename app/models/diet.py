@@ -22,5 +22,5 @@ class DietUpdate(SQLModel):
 
 class DietCreateSchema(SQLModel):
     name: str
-    content: str
+    content: dict[str, str] = {}
     ingredients: List[UUID]
