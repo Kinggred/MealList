@@ -6,11 +6,11 @@ Recipies can be used to plan full meals per x amount of servings and taking into
 Such data makes shopping calculations essentially non-existent as MealList can then sum ingredients necessary to create planned meals and estimate cost among generated shopping list.
 
 <h2>Vocab</h2>
-- Ingredient - Specific product or produce 
-- Recipe - List of Ingredients with amounts dosed per single serving
-- Dish - X amount of servings of specific recipe
-- Meal - X amount of Dishes planned to be served at the same time
-- Diet - Set of Ingredients allowed to be served.
+* Ingredient - Specific product or produce
+* Recipe - List of Ingredients with amounts dosed per single serving
+* Dish - X amount of servings of specific recipe
+* Meal - X amount of Dishes planned to be served at the same time
+* Diet - Set of Ingredients allowed to be served.
 
 <h2>Ingredient connectabilty</h2>
 To allow for a more streamlined setting of diets it is possible to interconnect Ingredients with each other.
