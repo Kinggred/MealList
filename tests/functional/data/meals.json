@@ -1,0 +1,32 @@
+{
+  "monday_breakfast": {
+    "id": "d340ca28-7df5-418d-8fe9-ad274eb4c766",
+    "name": "Monday Breakfast",
+    "date": "2026-06-01T08:00:00",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "monday_lunch": {
+    "id": "9f17c2f1-dfc8-4b4b-ae78-03a4013f8c11",
+    "name": "Monday Lunch",
+    "date": "2026-06-01T13:00:00",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "monday_dinner": {
+    "id": "afaac8a4-6163-44dc-af46-b45e49ced9f8",
+    "name": "Monday Dinner",
+    "date": "2026-06-01T19:00:00",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "tuesday_breakfast": {
+    "id": "83699b97-c9d9-4d46-97f4-c930d0d6f618",
+    "name": "Tuesday Breakfast",
+    "date": "2026-06-02T08:00:00",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "tuesday_lunch": {
+    "id": "8fdce83c-2f11-4d6f-8fd8-d702bb5bf870",
+    "name": "Tuesday Lunch",
+    "date": "2026-06-02T13:00:00",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  }
+}

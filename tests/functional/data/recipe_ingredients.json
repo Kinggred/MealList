@@ -1,0 +1,132 @@
+{
+  "scrambled_eggs_egg": {
+    "id": "4a0fd801-e153-4895-8973-83e6f43d2ef5",
+    "recipe": "scrambled_eggs",
+    "ingredient": "egg",
+    "amount": 3,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "scrambled_eggs_milk": {
+    "id": "f26dbd25-1a52-4fe9-a7e2-17d15e02b622",
+    "recipe": "scrambled_eggs",
+    "ingredient": "milk",
+    "amount": 50,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "scrambled_eggs_butter": {
+    "id": "1dd6473d-a4f1-48d6-89ec-55dc9408f9fa",
+    "recipe": "scrambled_eggs",
+    "ingredient": "butter",
+    "amount": 20,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+
+  "chicken_rice_chicken_breast": {
+    "id": "7463b428-781a-405f-9d7b-4b40915fe383",
+    "recipe": "chicken_rice",
+    "ingredient": "chicken_breast",
+    "amount": 200,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "chicken_rice_rice": {
+    "id": "f931dd30-d109-4d64-b5bb-02ac66f29725",
+    "recipe": "chicken_rice",
+    "ingredient": "rice",
+    "amount": 100,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+
+  "cheese_sandwich_bread": {
+    "id": "a1396e3e-4fbb-4789-8d10-83719ef26abd",
+    "recipe": "cheese_sandwich",
+    "ingredient": "bread",
+    "amount": 100,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "cheese_sandwich_butter": {
+    "id": "f3f18995-6a1e-4481-ad53-913d64d04166",
+    "recipe": "cheese_sandwich",
+    "ingredient": "butter",
+    "amount": 15,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "cheese_sandwich_cheese": {
+    "id": "bf315647-b8dd-41c1-962f-4d7c0b043e98",
+    "recipe": "cheese_sandwich",
+    "ingredient": "cheese",
+    "amount": 60,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "cheese_sandwich_tomato": {
+    "id": "1d536f51-0489-44cb-aa58-9f2c7f66caf9",
+    "recipe": "cheese_sandwich",
+    "ingredient": "tomato",
+    "amount": 1,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "cheese_sandwich_lettuce": {
+    "id": "7219c43a-5e20-4731-9c4f-faf039f02e75",
+    "recipe": "cheese_sandwich",
+    "ingredient": "lettuce",
+    "amount": 1,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+
+  "tomato_sandwich_bread": {
+    "id": "d33025b4-786d-4c3e-a556-ff85e8c5fe70",
+    "recipe": "tomato_sandwich",
+    "ingredient": "bread",
+    "amount": 100,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "tomato_sandwich_tomato": {
+    "id": "318d1f75-87b2-4854-a815-fb2818182996",
+    "recipe": "tomato_sandwich",
+    "ingredient": "tomato",
+    "amount": 1,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "tomato_sandwich_lettuce": {
+    "id": "b53c68e8-08e6-492b-8034-8e87032a03e1",
+    "recipe": "tomato_sandwich",
+    "ingredient": "lettuce",
+    "amount": 1,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "tomato_sandwich_olive_oil": {
+    "id": "784bafc7-a3bd-4993-83ff-3c2f2c2163f0",
+    "recipe": "tomato_sandwich",
+    "ingredient": "olive_oil",
+    "amount": 10,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+
+  "potato_pancakes_potato": {
+    "id": "570ee602-5843-4d59-9d66-aec1ff92508d",
+    "recipe": "potato_pancakes",
+    "ingredient": "potato",
+    "amount": 300,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "potato_pancakes_onion": {
+    "id": "092a71cd-cb55-4b52-8b9b-66d4a7bdbf18",
+    "recipe": "potato_pancakes",
+    "ingredient": "onion",
+    "amount": 100,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "potato_pancakes_flour": {
+    "id": "d5657ca0-7259-4380-96f5-23678751bed2",
+    "recipe": "potato_pancakes",
+    "ingredient": "flour",
+    "amount": 40,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "potato_pancakes_olive_oil": {
+    "id": "946366dc-a1cd-4601-8879-87a3bbb530f2",
+    "recipe": "potato_pancakes",
+    "ingredient": "olive_oil",
+    "amount": 20,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "vegetarian_chicken_breast": {
+    "id": "9e2f5f7e-5980-4c0d-8158-4eaa7337344f",
+    "diet": "vegetarian",
+    "ingredient": "chicken_breast",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "vegan_milk": {
+    "id": "1e0f1cc6-d296-4277-bbd8-80d3205779eb",
+    "diet": "vegan",
+    "ingredient": "milk",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "vegan_butter": {
+    "id": "6db7cbcc-d37f-4e9f-a708-520fdc21f494",
+    "diet": "vegan",
+    "ingredient": "butter",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "vegan_egg": {
+    "id": "de5801a5-b78a-46d2-8fd4-fb0349478375",
+    "diet": "vegan",
+    "ingredient": "egg",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "vegan_chicken_breast": {
+    "id": "8237c3f8-46db-4677-961f-6332e67ca1ef",
+    "diet": "vegan",
+    "ingredient": "chicken_breast",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "vegan_cheese": {
+    "id": "c46d0903-befc-412b-a9d0-5788f53585d8",
+    "diet": "vegan",
+    "ingredient": "cheese",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  }
+}

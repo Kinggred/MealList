@@ -77,8 +77,8 @@ class DishesCalculationsView(SQLModel):
 
     @classmethod
     def from_meal_dishes(
-        cls,
-        meal_dishes: list[MealDish],
+            cls,
+            meal_dishes: list[MealDish],
     ) -> list["DishesCalculationsView"]:
         aggregated = defaultdict(
             lambda: {
@@ -88,8 +88,12 @@ class DishesCalculationsView(SQLModel):
         )
 
         for meal_dish in meal_dishes:
-            aggregated[meal_dish.recipe_id]["full_portions"] += meal_dish.full_portions
-            aggregated[meal_dish.recipe_id]["half_portions"] += meal_dish.half_portions
+            effective_full_portions = (
+                    meal_dish.full_portions + math.ceil(meal_dish.half_portions / 2)
+            )
+
+            aggregated[meal_dish.recipe_id]["full_portions"] += effective_full_portions
+            aggregated[meal_dish.recipe_id]["half_portions"] += 0
 
         return [
             cls(

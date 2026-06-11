@@ -1,0 +1,42 @@
+{
+  "butter_contains_milk": {
+    "id": "2b3076b8-7749-4d4f-b3bc-5cc1d0c4478e",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5",
+    "ingredient": "butter",
+    "contained": "milk",
+    "is_alternative": false,
+    "include_in_count": false
+  },
+  "cheese_contains_milk": {
+    "id": "65d6f0df-5f97-4d8d-8f94-4ea7153a60cb",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5",
+    "ingredient": "cheese",
+    "contained": "milk",
+    "is_alternative": false,
+    "include_in_count": false
+  },
+  "margarine_alternative_to_butter": {
+    "id": "beac5f95-0cf0-4f44-bce7-7950bb12e9b4",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5",
+    "ingredient": "butter",
+    "contained": "margarine",
+    "is_alternative": true,
+    "include_in_count": false
+  },
+  "bread_contains_flour": {
+    "id": "0f0e1c37-b62c-47c7-a973-28fd4fd0c1d0",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5",
+    "ingredient": "bread",
+    "contained": "flour",
+    "is_alternative": false,
+    "include_in_count": false
+  },
+  "flour_alternative": {
+    "id": "6ab05b1e-4b72-49df-a08e-1f18287bdba5",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5",
+    "ingredient": "flour",
+    "contained": "rice",
+    "is_alternative": true,
+    "include_in_count": false
+  }
+}

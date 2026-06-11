@@ -1,0 +1,18 @@
+{
+  "vegetarian": {
+    "id": "1efc1ad2-7e8c-4e7c-b16c-3f1d2a2c85c1",
+    "name": "Vegetarian",
+    "content": {
+      "description": "Allows animal-produced ingredients, excludes animal-derived ingredients."
+    },
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "vegan": {
+    "id": "4cb84da3-5538-43bc-a9a7-477c8ee27fd1",
+    "name": "Vegan",
+    "content": {
+      "description": "Excludes both animal-produced and animal-derived ingredients."
+    },
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  }
+}
