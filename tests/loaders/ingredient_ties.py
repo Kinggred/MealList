@@ -8,7 +8,7 @@ from pathlib import Path
 from uuid import UUID
 
 from app.models.ingredient_self_reference import IngredientSelfReference
-from tests.functional.loaders.ingredients import load_all_ingredients
+from tests.loaders.ingredients import load_all_ingredients
 
 DATA_FILE = Path(__file__).parent.parent / "data" / "ingredient_ties.json"
 

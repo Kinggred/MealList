@@ -63,7 +63,7 @@ def delete_diet(
     user: Annotated[User, Depends(get_current_active_user)],
     diet_id: UUID,
 ):
-    diet_crud.safe_remove(db, user, diet_id)
+    diet_crud.safe_remove(db, user, id=diet_id)
 
 
 @diet_router.patch("/{diet_id}/ingredients")

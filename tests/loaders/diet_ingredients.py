@@ -3,8 +3,8 @@ from pathlib import Path
 from uuid import UUID
 
 from app.models.diet_ingredient import DietIngredient
-from tests.functional.loaders.diets import load_all_diets
-from tests.functional.loaders.ingredients import load_all_ingredients
+from tests.loaders.diets import load_all_diets
+from tests.loaders.ingredients import load_all_ingredients
 
 DATA_FILE = Path(__file__).parent.parent / "data" / "diet_ingredients.json"
 

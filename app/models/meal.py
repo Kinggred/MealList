@@ -37,10 +37,6 @@ class MealView(SQLModel):
 
     @classmethod
     def from_rows(cls, rows) -> "MealView":
-        """
-        :param rows: (Meal, MealDish, Recipe)
-        :return: MealView
-        """
         try:
             meal = rows[0][0]
         except IndexError:
@@ -57,6 +53,7 @@ class MealView(SQLModel):
                     half_portions=meal_dish.half_portions,
                 )
                 for _, meal_dish, recipe in rows
+                if meal_dish is not None and recipe is not None
             ],
         )
 

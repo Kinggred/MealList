@@ -4,6 +4,7 @@ from fastapi import APIRouter
 from fastapi.params import Depends
 from fastapi_pagination import Page
 from sqlmodel import Session
+from uuid import UUID
 
 from app.api.auth import get_current_active_user
 from app.api.database import get_session
@@ -46,7 +47,7 @@ def create_ingredient(
 def get_ingredient(
     db: Annotated[Session, Depends(get_session)],
     user: Annotated[User, Depends(get_current_active_user)],
-    ingredient_id: str,
+    ingredient_id: UUID,
 ):
     return ingredient_crud.get_ingredient_with_ties(db=db, id=ingredient_id)
 
@@ -55,14 +56,14 @@ def get_ingredient(
 def update_ingredient(
     db: Annotated[Session, Depends(get_session)],
     user: Annotated[User, Depends(get_current_active_user)],
-    ingredient_id: str,
+    ingredient_id: UUID,
     ingredient: IngredientUpdate,
 ) -> IngredientResponse:
     return ingredient_crud.safe_update(
         db=db,
         user=user,
         updated_obj_id=ingredient_id,
-        ingredient=ingredient,
+        obj_in=ingredient,
     )
 
 
@@ -70,7 +71,7 @@ def update_ingredient(
 def delete_ingredient(
     db: Annotated[Session, Depends(get_session)],
     user: Annotated[User, Depends(get_current_active_user)],
-    ingredient_id: str,
+    ingredient_id: UUID,
 ):
     return ingredient_crud.safe_remove(db=db, user=user, id=ingredient_id)
 
@@ -83,7 +84,7 @@ def tie_ingredients(
     db: Annotated[Session, Depends(get_session)],
     user: Annotated[User, Depends(get_current_active_user)],
     create_ingredient_tie: CreateIngredientTie,
-    ingredient_id: str,
+    ingredient_id: UUID,
 ):
     obj_in = IngredientSelfReferenceCreate(
         **create_ingredient_tie.model_dump(), ingredient_id=ingredient_id

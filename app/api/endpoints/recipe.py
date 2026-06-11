@@ -71,7 +71,7 @@ def delete_recipe(
     user: Annotated[User, Depends(get_current_active_user)],
     recipe_id: UUID,
 ):
-    return recipe_crud.safe_delete(db, id=recipe_id)
+    recipe_crud.safe_remove(db, user=user, id=recipe_id)
 
 
 @recipe_router.post("/{recipe_id}/ingredients")
