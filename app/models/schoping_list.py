@@ -14,7 +14,7 @@ from app.models.recipe_ingredient import RecipeIngredient
 class ShoppingListView(SQLModel):
     date_from: date
     date_to: date
-    ingredient_list: list[IngredientInShoppingListView]
+    ingredient_list: list["IngredientInShoppingListView"]
 
     @classmethod
     def from_calculations(
@@ -22,8 +22,8 @@ class ShoppingListView(SQLModel):
         *,
         date_from: date,
         date_to: date,
-        calculations: list[IngredientsCalculationsView],
-        ingredients: list[Ingredient],
+        calculations: list["IngredientsCalculationsView"],
+        ingredients: list["Ingredient"],
     ) -> "ShoppingListView":
         ingredient_by_id = {
             ingredient.id: ingredient
@@ -53,8 +53,8 @@ class IngredientInShoppingListView(SQLModel):
     @classmethod
     def from_calculation(
         cls,
-        calculation: IngredientsCalculationsView,
-        ingredient: Ingredient,
+        calculation: "IngredientsCalculationsView",
+        ingredient: "Ingredient",
     ) -> "IngredientInShoppingListView":
         exact_amount = calculation.amount
 
@@ -112,7 +112,7 @@ class IngredientsCalculationsView(SQLModel):
     @classmethod
     def from_recipe_ingredients(
         cls,
-        dishes: list[DishesCalculationsView],
+        dishes: list["DishesCalculationsView"],
         rows: list[tuple[RecipeIngredient, Ingredient]],
     ) -> list["IngredientsCalculationsView"]:
         recipe_portions = {
