@@ -20,8 +20,8 @@ class Meal(BaseModel, MealCreate, table=True):
 
 
 class MealUpdate(SQLModel):
-    name: str | None
-    date: datetime | None
+    name: str | None = None
+    date: datetime | None = None
 
 
 class MealCreateSchema(SQLModel):
@@ -59,3 +59,6 @@ class MealView(SQLModel):
                 for _, meal_dish, recipe in rows
             ],
         )
+
+class MealListView(SQLModel):
+    results: List[Meal] = []

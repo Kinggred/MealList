@@ -26,9 +26,9 @@ class RecipeCreateSchema(RecipeCreate):
 
 
 class RecipeUpdate(SQLModel):
-    name: str | None
-    text: dict[str, str] | None
-    image: str | None
+    name: str | None = None
+    text: dict[str, str] | None = None
+    image: str | None = None
 
 
 class RecipeInDishView(SQLModel):
