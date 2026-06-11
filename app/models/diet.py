@@ -35,7 +35,7 @@ class DietView(SQLModel):
     ingredients: List[IngredientInDietView]
 
     @classmethod
-    def from_rows(cls, rows) -> DietView:
+    def from_rows(cls, rows) -> "DietView":
         """
         :param rows: (Diet Ingredients)
         :return: DietView

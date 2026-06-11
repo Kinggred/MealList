@@ -36,7 +36,7 @@ class MealView(SQLModel):
     dishes: List[MealDishView]
 
     @classmethod
-    def from_rows(cls, rows) -> MealView:
+    def from_rows(cls, rows) -> "MealView":
         """
         :param rows: (Meal, MealDish, Recipe)
         :return: MealView
