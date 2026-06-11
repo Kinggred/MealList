@@ -49,7 +49,7 @@ class RecipeView(SQLModel):
     def from_rows(
         cls,
         rows: list[tuple[Recipe, RecipeIngredient, Ingredient]],
-    ) -> RecipeView:
+    ) -> "RecipeView":
         recipe = rows[0][0]
 
         ingredients = [

@@ -1,0 +1,50 @@
+{
+  "monday_breakfast_scrambled_eggs": {
+    "id": "0bb79db2-a8de-4218-a608-5be969cc1bc1",
+    "meal": "monday_breakfast",
+    "recipe": "scrambled_eggs",
+    "full_portions": 2,
+    "half_portions": 1,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "monday_lunch_chicken_rice": {
+    "id": "49026f8f-35ca-4846-ab41-ef4792b88049",
+    "meal": "monday_lunch",
+    "recipe": "chicken_rice",
+    "full_portions": 3,
+    "half_portions": 0,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "monday_dinner_cheese_sandwich": {
+    "id": "99c6b03a-75ec-4303-a47f-704347276b0e",
+    "meal": "monday_dinner",
+    "recipe": "cheese_sandwich",
+    "full_portions": 1,
+    "half_portions": 2,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "monday_dinner_tomato_sandwich": {
+    "id": "6086ddc2-bfb3-4772-9e5c-425d3196ce75",
+    "meal": "monday_dinner",
+    "recipe": "tomato_sandwich",
+    "full_portions": 2,
+    "half_portions": 0,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "tuesday_breakfast_scrambled_eggs": {
+    "id": "b0da9686-0846-41b6-85b2-c82b8c3d7a91",
+    "meal": "tuesday_breakfast",
+    "recipe": "scrambled_eggs",
+    "full_portions": 1,
+    "half_portions": 3,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "tuesday_lunch_potato_pancakes": {
+    "id": "70ea0d24-0a96-4e9f-9711-016340f952bb",
+    "meal": "tuesday_lunch",
+    "recipe": "potato_pancakes",
+    "full_portions": 2,
+    "half_portions": 1,
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  }
+}

@@ -109,7 +109,12 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return paginate(db, statement)
 
     def create(
-        self, db: Session, *, user: User | None, obj_in: CreateSchemaType, **kwargs
+        self,
+        db: Session,
+        *,
+        user: User | None = None,
+        obj_in: CreateSchemaType,
+        **kwargs,
     ) -> ModelType:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data)  # type: ignore

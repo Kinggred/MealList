@@ -1,0 +1,33 @@
+{
+  "admin": {
+    "id": "7a4d7a43-0c90-43f5-a84a-52fc555c5f90",
+    "username": "admin",
+    "email": "admin@meallist.local",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$RBDKHIHFkeAlUG1/zmEKhQ$sCzfJm/53E2Pf6TxOVHBhQO+ThSMmzUk/S4FdjTQv4Q"
+  },
+  "chef_john": {
+    "id": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5",
+    "username": "chef_john",
+    "email": "john@meallist.local",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$RBDKHIHFkeAlUG1/zmEKhQ$sCzfJm/53E2Pf6TxOVHBhQO+ThSMmzUk/S4FdjTQv4Q"
+  },
+  "chef_anna": {
+    "id": "79b67f7c-5d2f-4c29-881e-3f14a0fda935",
+    "username": "chef_anna",
+    "email": "anna@meallist.local",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$RBDKHIHFkeAlUG1/zmEKhQ$sCzfJm/53E2Pf6TxOVHBhQO+ThSMmzUk/S4FdjTQv4Q"
+  },
+  "inactive_user": {
+    "id": "f5dcda2e-bab5-43dc-a097-53ba1ab28f0e",
+    "username": "inactive_user",
+    "email": "inactive@meallist.local",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$RBDKHIHFkeAlUG1/zmEKhQ$sCzfJm/53E2Pf6TxOVHBhQO+ThSMmzUk/S4FdjTQv4Q",
+    "enabled": false
+  },
+  "readonly_user": {
+    "id": "7c6934bd-ed4b-4a2b-bfe2-94947b52496f",
+    "username": "readonly_user",
+    "email": "readonly@meallist.local",
+    "password_hash": "$argon2id$v=19$m=65536,t=3,p=4$RBDKHIHFkeAlUG1/zmEKhQ$sCzfJm/53E2Pf6TxOVHBhQO+ThSMmzUk/S4FdjTQv4Q"
+  }
+}

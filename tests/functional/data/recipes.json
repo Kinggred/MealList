@@ -1,0 +1,53 @@
+
+{
+  "scrambled_eggs": {
+    "id": "55acbda0-4b52-4f1c-a7bb-bde2e07de59e",
+    "name": "Scrambled Eggs",
+    "text": {
+      "description": "Classic scrambled eggs with milk and butter.",
+      "instructions": "Whisk eggs with milk, cook slowly in butter."
+    },
+    "image": "scrambled-eggs.jpg",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "chicken_rice": {
+    "id": "8db04fc5-faa2-4703-b37d-d535ec1ab7b2",
+    "name": "Chicken Rice",
+    "text": {
+      "description": "Simple chicken breast with rice.",
+      "instructions": "Cook rice, fry chicken breast, combine."
+    },
+    "image": "chicken-rice.jpg",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "cheese_sandwich": {
+    "id": "c1b5f21c-f4a3-47ae-b8a1-47714a458262",
+    "name": "Cheese Sandwich",
+    "text": {
+      "description": "Bread with cheese, butter, lettuce, and tomato.",
+      "instructions": "Butter the bread, add cheese, lettuce, and tomato."
+    },
+    "image": "cheese-sandwich.jpg",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "tomato_sandwich": {
+    "id": "861a6e4b-77b4-42f1-807a-6fdf4e6ddf3a",
+    "name": "Tomato Sandwich",
+    "text": {
+      "description": "Vegan sandwich with tomato, lettuce, and olive oil.",
+      "instructions": "Add tomato and lettuce to bread, drizzle with olive oil."
+    },
+    "image": "tomato-sandwich.jpg",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  },
+  "potato_pancakes": {
+    "id": "a3d00b2d-7809-457c-a4cf-e1d01007779d",
+    "name": "Potato Pancakes",
+    "text": {
+      "description": "Potato pancakes with onion and flour.",
+      "instructions": "Grate potato and onion, mix with flour, fry in oil."
+    },
+    "image": "potato-pancakes.jpg",
+    "created_by": "e9f6be73-df64-4e89-9de7-cbcad92fd1f5"
+  }
+}

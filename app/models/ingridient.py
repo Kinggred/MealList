@@ -70,7 +70,7 @@ class IngredientInDietView(SQLModel):
     @classmethod
     def from_model(
         cls, ingredient: Ingredient, connection_id: UUID
-    ) -> IngredientInDietView:
+    ) -> "IngredientInDietView":
         return cls(
             id=ingredient.id,
             connection_id=connection_id,
@@ -94,7 +94,7 @@ class IngredientInRecipeView(SQLModel):
         cls,
         recipe_ingredient: "RecipeIngredient",
         ingredient: Ingredient,
-    ) -> IngredientInRecipeView:
+    ) -> "IngredientInRecipeView":
         counted_calories = int(
             ingredient.calories * recipe_ingredient.amount / ingredient.amount_per_cost
         )
