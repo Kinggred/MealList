@@ -12,16 +12,6 @@ from app.models.user import User
 class CRUDDietIngredient(
     CRUDBase[DietIngredient, DietIngredientCreate, DietIngredientCreate]
 ):
-
-    def _ensure_uuid_list(value: UUID | Iterable[UUID] | None) -> list[UUID]:
-        if value is None:
-            return []
-
-        if isinstance(value, UUID):
-            return [value]
-
-        return list(value)
-
     def add_with_derived(
         self,
         db: Session,
@@ -36,8 +26,6 @@ class CRUDDietIngredient(
             db,
             ingredients_ids=ingredient_ids,
         )
-
-        ingredient_ids = self._ensure_uuid_list(ingredient_ids)
 
         already_added_ingredient_ids = set(
             db.exec(
@@ -76,9 +64,7 @@ class CRUDDietIngredient(
         diet_ingredients_to_remove = db.exec(
             select(DietIngredient.id).where(
                 DietIngredient.diet_id == diet_id,
-                DietIngredient.ingredient_id.in_(
-                    self._ensure_uuid_list(ingredient_ids)
-                ),
+                DietIngredient.ingredient_id.in_(ingredient_ids),
             )
         ).all()
         self.safe_remove_many(db, user=user, ids=diet_ingredients_to_remove, hard=True)
