@@ -84,7 +84,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         statement = select(self.model).where(
             self.model.id == id, self.model.enabled == True
         )
-        data = db.exec(statement).first()
+        return db.exec(statement).first()
 
     def get_all(
         self,
@@ -116,7 +116,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         obj_in: CreateSchemaType,
         **kwargs,
     ) -> ModelType:
-        obj_in_data = jsonable_encoder(obj_in)
+        obj_in_data = obj_in.model_dump()
         db_obj = self.model(**obj_in_data)  # type: ignore
         if self.assigned:
             if user is None:
@@ -166,9 +166,9 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         obj_in: UpdateSchemaType,
         **kwargs,
     ) -> ModelType:
-        current_obj = self.safe_get(db, updated_obj_id)
+        current_obj = self.safe_get(db, id=updated_obj_id)
         if user.id != current_obj.created_by:
-            raise ForbiddenException
+            raise ForbiddenException()
         return self.update(db, db_obj=current_obj, obj_in=obj_in)
 
     def update(

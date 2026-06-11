@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from dotenv import load_dotenv
 
 load_dotenv(".env.test")
@@ -28,7 +30,13 @@ from app.models.user import User  # noqa: F401
 
 
 @event.listens_for(Engine, "connect")
-def enable_sqlite_foreign_keys(dbapi_connection, connection_record):
+def setup_sqlite(dbapi_connection, connection_record):
+    dbapi_connection.create_function(
+        "uuid_generate_v4",
+        0,
+        lambda: uuid4().hex,
+    )
+
     cursor = dbapi_connection.cursor()
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.close()

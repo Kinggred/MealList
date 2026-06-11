@@ -26,7 +26,7 @@ class CRUDIngredient(CRUDBase[Ingredient, IngredientCreate, IngredientUpdate]):
         return super().create(db, user=user, obj_in=obj_in, **kwargs)
 
     def get_ingredient_with_ties(self, db: Session, id: UUID) -> IngredientWithTies:
-        ingredient = db.exec(select(self.model).where(self.model.id == id)).first()
+        ingredient = self.safe_get(db, id=id)
         if not ingredient:
             raise NotFoundException
         response = IngredientWithTies(**ingredient.model_dump())

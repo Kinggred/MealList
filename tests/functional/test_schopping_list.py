@@ -4,9 +4,9 @@ from app.crud.ingredient import ingredient_crud
 from app.crud.meal import meal_crud
 from app.crud.meal_dish import meal_dish_crud
 from app.crud.recipe_ingredient import recipe_ingredient_crud
-from tests.functional.loaders.meal_dish import load_all_meal_dishes
-from tests.functional.loaders.recipe_ingredients import load_all_recipe_ingredients
-from tests.functional.loaders.users import load_user
+from tests.loaders.meal_dish import load_all_meal_dishes
+from tests.loaders.recipe_ingredients import load_all_recipe_ingredients
+from tests.loaders.users import load_user
 
 """
  These tests are not exactly functional ... 

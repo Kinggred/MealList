@@ -13,7 +13,7 @@ from app.api.auth import (
 )
 from app.api.exceptions import UnauthorizedException
 from app.core.settings import get_settings
-from tests.functional.loaders.users import load_user
+from tests.loaders.users import load_user
 
 
 def test_get_password_hash_creates_verifiable_hash():

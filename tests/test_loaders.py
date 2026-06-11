@@ -1,14 +1,14 @@
 from uuid import UUID
 
-from tests.functional.loaders.diet_ingredients import load_all_diet_ingredients
-from tests.functional.loaders.diets import load_diet, load_all_diets
-from tests.functional.loaders.ingredient_ties import load_all_ingredient_ties
-from tests.functional.loaders.meal_dish import load_all_meal_dishes
-from tests.functional.loaders.meals import load_meal, load_all_meals
-from tests.functional.loaders.recipe_ingredients import load_all_recipe_ingredients
-from tests.functional.loaders.recipes import load_recipe, load_all_recipes
-from tests.functional.loaders.users import load_user, load_all_users
-from tests.functional.loaders.ingredients import load_all_ingredients, load_ingredient
+from tests.loaders.diet_ingredients import load_all_diet_ingredients
+from tests.loaders.diets import load_diet, load_all_diets
+from tests.loaders.ingredient_ties import load_all_ingredient_ties
+from tests.loaders.meal_dish import load_all_meal_dishes
+from tests.loaders.meals import load_meal, load_all_meals
+from tests.loaders.recipe_ingredients import load_all_recipe_ingredients
+from tests.loaders.recipes import load_recipe, load_all_recipes
+from tests.loaders.users import load_user, load_all_users
+from tests.loaders.ingredients import load_all_ingredients, load_ingredient
 
 
 def test_load_single_user(session):
