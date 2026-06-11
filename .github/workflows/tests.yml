@@ -33,6 +33,9 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
 
+      - name: Load test env
+        run: cp .env.test
+
       - name: Run tests with coverage
         run: |
           pytest \
@@ -46,7 +49,7 @@ jobs:
         with:
           name: coverage-html
           path: htmlcov
-          
+
       - name: Upload coverage
         uses: codecov/codecov-action@v5
         with:
