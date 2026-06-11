@@ -21,6 +21,9 @@ from app.models.meal_dish import MealDish  # noqa: F401
 from app.models.recipe import Recipe  # noqa: F401
 from app.models.recipe_ingredient import RecipeIngredient  # noqa: F401
 from app.models.user import User  # noqa: F401
+from dotenv import load_dotenv
+
+load_dotenv(".env.test")
 
 
 @event.listens_for(Engine, "connect")

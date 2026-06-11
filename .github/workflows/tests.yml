@@ -33,8 +33,6 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
 
-      - name: Load test env
-        run: cp .env.test
 
       - name: Run tests with coverage
         run: |
