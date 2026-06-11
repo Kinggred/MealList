@@ -21,7 +21,7 @@ from app.models.user import User
 meal_router = APIRouter()
 
 
-@meal_router.get("/", response_model=Page[Meal])
+@meal_router.get("/", response_model=MealListView)
 def get_meals(
     db: Annotated[Session, Depends(get_session)],
     user: Annotated[User, Depends(get_current_active_user)],
@@ -108,7 +108,9 @@ def add_dish(
     meal_id: UUID,
     dish_to_add: MealDishCreateSchema,
 ) -> MealDish:
-    return meal_dish_crud.add_meal_dish(db, user, meal_id, dish_to_add)
+    return meal_dish_crud.add_meal_dish(
+        db, user=user, meal_id=meal_id, meal_dish=dish_to_add
+    )
 
 
 @meal_router.patch("/{meal_id}/dishes/{connection_id}")
@@ -120,7 +122,7 @@ def update_dish(
     dish_to_update: MealDishUpdate,
 ) -> MealDish:
     return meal_dish_crud.safe_update(
-        db, user=user, id=connection_id, obj_in=dish_to_update
+        db, user=user, updated_obj_id=connection_id, obj_in=dish_to_update
     )
 
 

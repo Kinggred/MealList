@@ -12,18 +12,40 @@ from app.models.user import User
 class CRUDDietIngredient(
     CRUDBase[DietIngredient, DietIngredientCreate, DietIngredientCreate]
 ):
+
+    def _ensure_uuid_list(value: UUID | Iterable[UUID] | None) -> list[UUID]:
+        if value is None:
+            return []
+
+        if isinstance(value, UUID):
+            return [value]
+
+        return list(value)
+
     def add_with_derived(
-        self, db: Session, user: User, ingredient_ids: List[UUID], diet_id: UUID
+        self,
+        db: Session,
+        user: User,
+        ingredient_ids: list[UUID],
+        diet_id: UUID,
     ):
         """
         UNSAFE - precheck if diet exists
         """
-        ingredient_ids = ingredient_crud.multi_get_derivative_ids(db, ingredient_ids)
-        already_added_ingredients = db.exec(
-            select(DietIngredient.id).where(
-                DietIngredient.diet_id == diet_id,
-                DietIngredient.ingredient_id.in_(ingredient_ids),
-            )
+        ingredient_ids = ingredient_crud.multi_get_derivative_ids(
+            db,
+            ingredients_ids=ingredient_ids,
+        )
+
+        ingredient_ids = self._ensure_uuid_list(ingredient_ids)
+
+        already_added_ingredient_ids = set(
+            db.exec(
+                select(DietIngredient.ingredient_id).where(
+                    DietIngredient.diet_id == diet_id,
+                    DietIngredient.ingredient_id.in_(ingredient_ids),
+                )
+            ).all()
         )
 
         ingredients_to_add = [
@@ -32,20 +54,31 @@ class CRUDDietIngredient(
                 ingredient_id=ingredient_id,
             )
             for ingredient_id in ingredient_ids
-            if ingredient_id not in already_added_ingredients
+            if ingredient_id not in already_added_ingredient_ids
         ]
 
-        self.create_many(db, user=user, objs_in=ingredients_to_add)
+        if not ingredients_to_add:
+            return []
+
+        return self.create_many(
+            db,
+            user=user,
+            objs_in=ingredients_to_add,
+        )
 
     def remove_with_derived(
         self, db: Session, user: User, diet_id: UUID, ingredient_ids: List[UUID]
     ):
-        ingredient_ids = ingredient_crud.multi_get_derivative_ids(db, ingredient_ids)
+        ingredient_ids = ingredient_crud.multi_get_derivative_ids(
+            db, ingredients_ids=ingredient_ids
+        )
 
         diet_ingredients_to_remove = db.exec(
             select(DietIngredient.id).where(
                 DietIngredient.diet_id == diet_id,
-                DietIngredient.ingredient_id.in_(ingredient_ids),
+                DietIngredient.ingredient_id.in_(
+                    self._ensure_uuid_list(ingredient_ids)
+                ),
             )
         ).all()
         self.safe_remove_many(db, user=user, ids=diet_ingredients_to_remove, hard=True)

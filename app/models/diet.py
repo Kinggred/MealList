@@ -54,5 +54,5 @@ class DietView(SQLModel):
 
 
 class UpdateIngredientsInDietSchema(SQLModel):
-    add: List[UUID]
-    remove: List[UUID]
+    add: List[UUID] = []
+    remove: List[UUID] = []

@@ -73,10 +73,14 @@ class CRUDIngredient(CRUDBase[Ingredient, IngredientCreate, IngredientUpdate]):
         return ingredient_self_reference_crud.get_ids_of_derivatives(db, ingredient_id)
 
     def multi_get_derivative_ids(
-        self, db: Session, *, ingredients_ids: List[UUID]
-    ) -> List[UUID]:
-        return ingredient_self_reference_crud.multi_get_derivative_ids(
-            db, ingredients_ids
+        self,
+        db: Session,
+        *,
+        ingredients_ids: list[UUID],
+    ) -> list[UUID]:
+        return ingredient_self_reference_crud.multi_get_ids_of_derivatives(
+            db,
+            ids=ingredients_ids,
         )
 
     def build_shopping_list(
