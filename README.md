@@ -1,5 +1,5 @@
 # MealList API
-
+[![codecov](https://codecov.io/gh/Kinggred/MealList/branch/main/graph/badge.svg)](https://codecov.io/gh/Kinggred/MealList)
 ## Goals
 
 The goal of this application is to streamline organization in a professional kitchen.
