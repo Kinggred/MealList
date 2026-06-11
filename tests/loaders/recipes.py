@@ -1,59 +1,31 @@
-import json
 from pathlib import Path
-from uuid import UUID
 
 from app.models.recipe import Recipe
+from tests.loaders.base import load_json, load_many, load_single
+from tests.loaders.users import load_user
 
 DATA_FILE = Path(__file__).parent.parent / "data" / "recipes.json"
 
 
-def _load_data() -> dict:
-    with open(DATA_FILE) as file:
-        return json.load(file)
+def build_recipe(data: dict) -> Recipe:
+    return Recipe.model_validate(data)
 
 
 def load_recipe(session, name: str) -> Recipe:
-    data = _load_data()[name]
-
-    recipe = Recipe(
-        id=UUID(data["id"]),
-        name=data["name"],
-        text=data["text"],
-        image=data["image"],
-        created_by=UUID(data["created_by"]),
+    load_user(session, "chef_john")
+    return load_single(
+        session=session,
+        model=Recipe,
+        data=load_json(DATA_FILE)[name],
+        builder=build_recipe,
     )
-
-    session.add(recipe)
-    session.commit()
-    session.refresh(recipe)
-
-    return recipe
 
 
 def load_all_recipes(session) -> list[Recipe]:
-    recipes = []
-
-    for data in _load_data().values():
-        recipe_id = UUID(data["id"])
-
-        existing = session.get(Recipe, recipe_id)
-        if existing is not None:
-            recipes.append(existing)
-            continue
-
-        recipe = Recipe(
-            id=recipe_id,
-            name=data["name"],
-            text=data["text"],
-            image=data["image"],
-            created_by=UUID(data["created_by"]),
-        )
-        session.add(recipe)
-        recipes.append(recipe)
-
-    session.commit()
-
-    for recipe in recipes:
-        session.refresh(recipe)
-
-    return recipes
+    load_user(session, "chef_john")
+    return load_many(
+        session=session,
+        model=Recipe,
+        data=load_json(DATA_FILE),
+        builder=build_recipe,
+    )

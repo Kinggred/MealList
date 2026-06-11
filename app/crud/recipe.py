@@ -28,11 +28,12 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
             )
             recipe_ingredient_crud.create(db, user=user, obj_in=ingredient_to_add)
 
-        return recipe
+        return self.safe_get(db, id=recipe.id)
 
     def get_recipe_view(
         self, db: Session, user: User, *, recipe_id: UUID
     ) -> RecipeView:
+        self.safe_get(db, user=user, id=recipe_id)
         statement = (
             select(Recipe, RecipeIngredient, Ingredient)
             .join(RecipeIngredient, Recipe.id == RecipeIngredient.recipe_id)

@@ -1,51 +1,31 @@
-import json
-from datetime import datetime
 from pathlib import Path
-from uuid import UUID
 
 from app.models.meal import Meal
+from tests.loaders.base import load_json, load_many, load_single
+from tests.loaders.users import load_user
 
 DATA_FILE = Path(__file__).parent.parent / "data" / "meals.json"
 
 
-def _load_data() -> dict:
-    with open(DATA_FILE) as file:
-        return json.load(file)
+def build_meal(data: dict) -> Meal:
+    return Meal.model_validate(data)
 
 
 def load_meal(session, name: str) -> Meal:
-    data = _load_data()[name]
-
-    meal = Meal(
-        id=UUID(data["id"]),
-        name=data["name"],
-        date=datetime.fromisoformat(data["date"]),
-        created_by=UUID(data["created_by"]),
+    load_user(session, "chef_john")
+    return load_single(
+        session=session,
+        model=Meal,
+        data=load_json(DATA_FILE)[name],
+        builder=build_meal,
     )
-
-    session.add(meal)
-    session.commit()
-    session.refresh(meal)
-
-    return meal
 
 
 def load_all_meals(session) -> list[Meal]:
-    meals = []
-
-    for data in _load_data().values():
-        meal = Meal(
-            id=UUID(data["id"]),
-            name=data["name"],
-            date=datetime.fromisoformat(data["date"]),
-            created_by=UUID(data["created_by"]),
-        )
-        meals.append(meal)
-
-    session.add_all(meals)
-    session.commit()
-
-    for meal in meals:
-        session.refresh(meal)
-
-    return meals
+    load_user(session, "chef_john")
+    return load_many(
+        session=session,
+        model=Meal,
+        data=load_json(DATA_FILE),
+        builder=build_meal,
+    )
