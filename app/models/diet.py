@@ -19,7 +19,7 @@ class DietCreate(SQLModel):
 
 class DietUpdate(SQLModel):
     name: str | None = None
-    content: str | None = None
+    content: dict[str, str] | None = None
 
 
 class DietCreateSchema(SQLModel):

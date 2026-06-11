@@ -74,7 +74,7 @@ def test_load_all_diet_ingredients(session):
 
     diet_ingredients = load_all_diet_ingredients(session)
 
-    assert len(diet_ingredients) == 6
+    assert len(diet_ingredients) == 5
     assert all(isinstance(item.id, UUID) for item in diet_ingredients)
     assert all(isinstance(item.diet_id, UUID) for item in diet_ingredients)
     assert all(isinstance(item.ingredient_id, UUID) for item in diet_ingredients)

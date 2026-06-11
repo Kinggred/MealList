@@ -140,7 +140,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db_objs: list[ModelType] = []
 
         for obj_in in objs_in:
-            obj_in_data = jsonable_encoder(obj_in)
+            obj_in_data = obj_in.model_dump()
             db_obj = self.model(**obj_in_data)  # type: ignore
 
             if self.assigned:

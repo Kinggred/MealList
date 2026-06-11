@@ -53,14 +53,24 @@ class CRUDMeal(CRUDBase[Meal, MealCreate, MealUpdate]):
             # TODO: Push many at once to db, will do for POC
             dish_schema = MealDishCreate(**dish.model_dump(), meal_id=meal_in_db.id)
             meal_dish_crud.create(db=db, user=user, obj_in=dish_schema)
-        return meal_in_db
+        return self.safe_get(db, id=meal_in_db.id)
 
     def get_with_dishes(self, db: Session, user: User, meal_id: int) -> MealView:
+        self.safe_get(db, id=meal_id)
         statement = (
-            select(self.model, MealDish, Recipe)
-            .join(MealDish, MealDish.meal_id == self.model.id)
-            .join(Recipe, Recipe.id == MealDish.recipe_id)
-            .where(self.model.id == meal_id, self.model.created_by == user.id)
+            select(Meal, MealDish, Recipe)
+            .outerjoin(
+                MealDish,
+                (MealDish.meal_id == Meal.id) & (MealDish.enabled == True),
+            )
+            .outerjoin(
+                Recipe,
+                (Recipe.id == MealDish.recipe_id) & (Recipe.enabled == True),
+            )
+            .where(
+                Meal.id == meal_id,
+                Meal.enabled == True,
+            )
         )
         meal_with_dishes = db.exec(statement).all()
         return MealView.from_rows(meal_with_dishes)

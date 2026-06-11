@@ -26,9 +26,10 @@ class CRUDDiet(CRUDBase[Diet, DietCreate, DietUpdate]):
                 ingredient_id=ingredient_id, diet_id=diet.id
             )
             diet_ingredient_crud.create(db, user=user, obj_in=diet_ingredient_create)
-        return diet
+        return self.safe_get(db, id=diet.id)
 
     def get_with_ingredients(self, db: Session, diet_id: UUID) -> DietView:
+        self.safe_get(db, id=diet_id)
         statement = (
             select(Diet, DietIngredient.id, Ingredient)
             .join(DietIngredient, Diet.id == DietIngredient.diet_id)
@@ -48,16 +49,16 @@ class CRUDDiet(CRUDBase[Diet, DietCreate, DietUpdate]):
         if len(update_data.add) > 0:
             diet_ingredient_crud.add_with_derived(
                 db,
-                user,
-                diet_id,
-                update_data.add,
+                user=user,
+                ingredient_ids=update_data.add,
+                diet_id=diet_id,
             )
         if len(update_data.remove) > 0:
             diet_ingredient_crud.remove_with_derived(
                 db,
-                user,
-                diet_id,
-                update_data.remove,
+                user=user,
+                diet_id=diet_id,
+                ingredient_ids=update_data.remove,
             )
 
 
