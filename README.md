@@ -72,11 +72,11 @@ MealList currently uses OAuth2 Password Bearer authentication.
 
 ## Planned Features
 
-- Recipe management
-- Meal planning calendar
-- Diet management
-- Shopping list generation
-- Cost estimation
-- Nutritional analysis
-- Inventory tracking
-- Ingredient substitution recommendations
+- Recipe management [x]
+- Meal planning calendar [x]
+- Diet management [x]
+- Shopping list generation [x]
+- Cost estimation [x]
+- Nutritional analysis []
+- Inventory tracking []
+- Ingredient substitution recommendations [x]

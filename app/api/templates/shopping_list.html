@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+  body {
+    font-family: DejaVu Sans, sans-serif;
+    font-size: 12px;
+    color: #222;
+  }
+
+  h1 {
+    margin-bottom: 4px;
+  }
+
+  .date-range {
+    margin-bottom: 24px;
+    color: #555;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th {
+    text-align: left;
+    background: #f0f0f0;
+  }
+
+  th, td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: #f7f7f7;
+  }
+
+  .number {
+    text-align: right;
+  }
+
+  tfoot th {
+    font-weight: bold;
+    background-color: #dcdcdc;
+    border-top: 2px solid #999;
+}
+</style>
+</head>
+<body>
+  <h1>Shopping list</h1>
+
+  <div class="date-range">
+    {{ data.date_from }} – {{ data.date_to }}
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th class="number">Exact amount</th>
+        <th class="number">Rounded amount</th>
+        <th>Unit</th>
+        <th class="number">Estimated cost</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in data.ingredient_list %}
+      <tr>
+        <td>{{ item.name }}</td>
+        <td class="number">{{ item.exact_amount }}</td>
+        <td class="number">{{ item.amount }}</td>
+        <td>{{ item.unit_of_measurement }}</td>
+        <td class="number">{{ item.estimated_cost }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <th colspan="4">Total</th>
+        <th class="number">{{ total_cost }}</th>
+      </tr>
+</tfoot>
+  </table>
+</body>
+</html>

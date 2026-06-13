@@ -6,7 +6,7 @@ from typing import List
 from sqlmodel import SQLModel
 from uuid import UUID
 
-from app.models.ingridient import Ingredient
+from app.models.ingridient import Ingredient, Units
 from app.models.meal_dish import MealDish
 from app.models.recipe_ingredient import RecipeIngredient
 
@@ -49,6 +49,7 @@ class IngredientInShoppingListView(SQLModel):
     exact_amount: float
     amount: float
     estimated_cost: float
+    unit_of_measurement: Units
 
     @classmethod
     def from_calculation(
@@ -68,6 +69,7 @@ class IngredientInShoppingListView(SQLModel):
             exact_amount=round(exact_amount, 2),
             amount=round(rounded_amount, 2),
             estimated_cost=round(calculation.estimated_cost, 2),
+            unit_of_measurement = ingredient.unit_of_measurement
         )
 
 class DishesCalculationsView(SQLModel):

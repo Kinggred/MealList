@@ -1,18 +1,16 @@
 from datetime import date, datetime, time
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 from fastapi.params import Query
-from fastapi_pagination import Page
 from sqlmodel import Session
 from typing_extensions import Annotated
 
 from app.api.auth import get_current_active_user
 from app.api.database import get_session
-from app.crud.ingredient import ingredient_crud
 from app.crud.meal import meal_crud
 from app.crud.meal_dish import meal_dish_crud
-from app.crud.recipe_ingredient import recipe_ingredient_crud
+from app.crud.shopping_list import shopping_list_crud
 from app.models.meal import MealCreateSchema, Meal, MealUpdate, MealView, MealListView
 from app.models.meal_dish import MealDishCreateSchema, MealDish, MealDishUpdate
 from app.models.schoping_list import ShoppingListView
@@ -42,33 +40,39 @@ def create_meal(
     return meal_crud.create_with_dishes(db, user, meal_to_add)
 
 
-@meal_router.get("/shopping_list")
+@meal_router.get(
+    "/shopping_list",
+    response_model=ShoppingListView,
+    responses={
+        200: {
+            "content": {
+                "application/json": {},
+                "application/pdf": {},
+            },
+            "description": "Shopping list as JSON or PDF",
+        }
+    },
+)
 def get_shopping_list(
     db: Annotated[Session, Depends(get_session)],
     user: Annotated[User, Depends(get_current_active_user)],
     date_from: Annotated[date | None, Query()] = date.today(),
     date_to: Annotated[date | None, Query()] = date.today(),
-) -> ShoppingListView:
-    start_dt = datetime.combine(date_from, time.min)
-    end_dt = datetime.combine(date_to, time.max)
-    meal_ids = [
-        meal.id
-        for meal in meal_crud.get_meals_in_range(
-            db=db, user=user, start_date=start_dt, end_date=end_dt
-        ).results
-    ]
-    dishes = meal_dish_crud.get_dishes_from_meal_list(db=db, meal_ids=meal_ids)
-    calculations = recipe_ingredient_crud.get_ingredient_calculations_from_dishes(
-        db,
-        dishes=dishes,
-    )
-    shopping_list = ingredient_crud.build_shopping_list(
-        db,
-        date_from=date_from,
-        date_to=date_to,
-        calculations=calculations,
-    )
-    return shopping_list
+    file: bool = False,
+):
+    if file:
+        pdf_bytes = shopping_list_crud.get_file_from_range(db, user, date_from, date_to)
+
+        return Response(
+            content=pdf_bytes,
+            media_type="application/pdf",
+            headers={
+                "Content-Disposition": (
+                    f'attachment; filename="shopping-list-{date_from}-{date_to}.pdf"'
+                )
+            },
+        )
+    return shopping_list_crud.get_list_from_range(db, user, date_from, date_to)
 
 
 @meal_router.get("/{meal_id}")
