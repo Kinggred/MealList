@@ -17,6 +17,13 @@ settings = get_settings()
 
 
 api_router = APIRouter(prefix="/api/v1")
+
+
+@api_router.get("/health")
+def health():
+    return {"status": "ok"}
+
+
 api_router.include_router(auth_router, prefix="/auth", tags=["auth"])
 api_router.include_router(user_router, prefix="/users", tags=["user"])
 api_router.include_router(
