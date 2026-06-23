@@ -33,7 +33,7 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
     def get_recipe_view(
         self, db: Session, user: User, *, recipe_id: UUID
     ) -> RecipeView:
-        self.safe_get(db, user=user, id=recipe_id)
+        recipe = self.safe_get(db, user=user, id=recipe_id)
         statement = (
             select(Recipe, RecipeIngredient, Ingredient)
             .join(RecipeIngredient, Recipe.id == RecipeIngredient.recipe_id)
@@ -41,7 +41,9 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
             .where(Recipe.id == recipe_id, Recipe.created_by == user.id)
         )
         recipe_with_dishes = db.exec(statement).all()
-        return RecipeView.from_rows(recipe_with_dishes)
+        if isinstance(recipe_with_dishes, tuple):
+            return RecipeView.from_rows(recipe_with_dishes)
+        return RecipeView(**recipe.model_dump())
 
 
 recipe_crud = CRUDRecipe(Recipe)

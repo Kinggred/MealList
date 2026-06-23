@@ -41,9 +41,9 @@ class RecipeView(SQLModel):
     name: str
     text: dict[str, str] | None
     image: str | None
-    ingredients: list[IngredientInRecipeView]
-    total_cost: float
-    total_calories: int
+    ingredients: list[IngredientInRecipeView] | None = []
+    total_cost: float | None = 0
+    total_calories: float | None = 0
 
     @classmethod
     def from_rows(
