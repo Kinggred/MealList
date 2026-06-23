@@ -112,3 +112,7 @@ class IngredientInRecipeView(SQLModel):
             amount=recipe_ingredient.amount,
             unit_of_measurement=ingredient.unit_of_measurement,
         )
+
+class IngredientInSearchView(SQLModel):
+    id: UUID
+    name: str

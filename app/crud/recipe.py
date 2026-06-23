@@ -41,9 +41,17 @@ class CRUDRecipe(CRUDBase[Recipe, RecipeCreate, RecipeUpdate]):
             .where(Recipe.id == recipe_id, Recipe.created_by == user.id)
         )
         recipe_with_dishes = db.exec(statement).all()
-        if isinstance(recipe_with_dishes, tuple):
-            return RecipeView.from_rows(recipe_with_dishes)
-        return RecipeView(**recipe.model_dump())
+
+        if not recipe_with_dishes:
+            return RecipeView(
+                id=recipe.id,
+                image=recipe.image,
+                name=recipe.name,
+                text=recipe.text,
+                ingredients=[],
+            )
+
+        return RecipeView.from_rows(recipe_with_dishes)
 
 
 recipe_crud = CRUDRecipe(Recipe)

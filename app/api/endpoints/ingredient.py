@@ -1,7 +1,7 @@
 from typing import List, Annotated
 
 from fastapi import APIRouter
-from fastapi.params import Depends
+from fastapi.params import Depends, Query
 from fastapi_pagination import Page
 from sqlmodel import Session
 from uuid import UUID
@@ -20,6 +20,7 @@ from app.models.ingridient import (
     IngredientCreate,
     IngredientWithTies,
     IngredientUpdate,
+    IngredientInSearchView,
 )
 from app.models.user import User
 
@@ -32,6 +33,20 @@ def get_ingredients(
     user: Annotated[User, Depends(get_current_active_user)],
 ) -> Page[IngredientResponse]:
     return ingredient_crud.paginated_get_all(db)
+
+
+@ingredient_router.get("/search", response_model=Page[IngredientInSearchView])
+def search_ingredients(
+    db: Annotated[Session, Depends(get_session)],
+    user: Annotated[User, Depends(get_current_active_user)],
+    search_query: str = "",
+    diet_ids: Annotated[list[UUID], Query()] = [],
+):
+    return ingredient_crud.search_for_ingredients(
+        db=db,
+        search_query=search_query,
+        diet_ids=diet_ids,
+    )
 
 
 @ingredient_router.post("/")

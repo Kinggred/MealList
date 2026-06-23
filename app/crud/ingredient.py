@@ -2,17 +2,21 @@ from datetime import date
 from typing import List
 from uuid import UUID
 
+from fastapi_pagination import Page
+from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlmodel import Session, select, or_
 
 from app.api.exceptions import NotFoundException
 from app.crud.base import CRUDBase, CreateSchemaType, ModelType
 from app.crud.ingredient_self_reference import ingredient_self_reference_crud
+from app.models.diet_ingredient import DietIngredient
 from app.models.ingredient_self_reference import IngredientSelfReference
 from app.models.ingridient import (
     Ingredient,
     IngredientCreate,
     IngredientUpdate,
     IngredientWithTies,
+    IngredientInSearchView,
 )
 from app.models.schoping_list import IngredientsCalculationsView, ShoppingListView
 from app.models.user import User
@@ -22,7 +26,6 @@ class CRUDIngredient(CRUDBase[Ingredient, IngredientCreate, IngredientUpdate]):
     def create(
         self, db: Session, *, user: User | None, obj_in: CreateSchemaType, **kwargs
     ) -> ModelType:
-        # VALIDATE and Standardize - units - Done by fastapi parsers already
         return super().create(db, user=user, obj_in=obj_in, **kwargs)
 
     def get_ingredient_with_ties(self, db: Session, id: UUID) -> IngredientWithTies:
@@ -66,6 +69,22 @@ class CRUDIngredient(CRUDBase[Ingredient, IngredientCreate, IngredientUpdate]):
                 response.contains.uncounted.append(ingredient)
 
         return response
+
+    def search_for_ingredients(
+        self, db: Session, search_query: str, diet_ids: list[UUID]
+    ) -> Page[IngredientInSearchView]:
+        query = select(Ingredient).where(Ingredient.name.ilike(f"%{search_query}%"))
+
+        if diet_ids:
+            already_used_subquery = select(DietIngredient.ingredient_id).where(
+                DietIngredient.diet_id.in_(diet_ids)
+            )
+
+            query = query.where(Ingredient.id.not_in(already_used_subquery))
+
+        query = query.order_by(Ingredient.name)
+
+        return paginate(db, query)
 
     def get_derivatives(
         self, db: Session, *, ingredient_id: UUID
